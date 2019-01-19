@@ -2,23 +2,33 @@
 
 
 [[projects]]
-  digest = "1:b702ef0f626558e20ce8e4bc7a61755c833995fb1baa5ebdb7a4f9e17e3f7b0e"
-  name = "github.com/go-chi/chi"
+  branch = "master"
+  digest = "1:9d36999559c7eef4ebead80dbb483b067232e81b7a5ec0e5fbae1d7b2504e77b"
+  name = "github.com/danielbintar/go-record"
   packages = [
-    ".",
-    "middleware",
+    "connections",
+    "db",
+    "normalizer",
+    "structs",
   ]
+  pruneopts = "UT"
+  revision = "831b9fd272adbd55950ed81d3799a3a5fdcbca63"
+
+[[projects]]
+  branch = "master"
+  digest = "1:d91c55b4b4fb7c79a1f5ab5b8a4357699bd8c198749336f4cae6c452dfb2f5fb"
+  name = "github.com/danielbintar/go-string"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9076a018a697f22decee5de31bf058f7799e89f6"
+
+[[projects]]
+  digest = "1:b8d8afedc1ea9028d6b8a037a61acaf5bac8ffb1ceb4b285a0af6654bfc62f16"
+  name = "github.com/go-chi/chi"
+  packages = ["."]
   pruneopts = "UT"
   revision = "e95203758b2a6ec24a8e97124d5719ffe5ec1374"
   version = "v4.0.0"
-
-[[projects]]
-  digest = "1:21dabeaca9843d626ae5463d7039952915732cbb19f8c0f2f0a8386a65da8265"
-  name = "github.com/go-chi/docgen"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "37388337149e698b11742f217b28acdc1bf52e1a"
-  version = "v1.0.4"
 
 [[projects]]
   digest = "1:54d7b4b9ab2bb2bae35b55eea900bc8fe15cba05a95fc78bf7fd7b82a9a07afa"
@@ -28,14 +38,47 @@
   revision = "3215478343fbc559bd3fc08f7031bb134d6bdad5"
   version = "v1.0.1"
 
+[[projects]]
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
+  digest = "1:7b5c6e2eeaa9ae5907c391a91c132abfd5c9e8a784a341b5625e750c67e6825d"
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
+
+[[projects]]
+  digest = "1:bb0d999fbfbc40f7bf42a24eca5e6894fa24a9efdad13d6908bea34bc3309722"
+  name = "github.com/subosito/gotenv"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "69b5b6104433beb2cb9c3ce00bdadf3c7c2d3f34"
+  version = "v1.1.1"
+
+[[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/danielbintar/go-record/db",
     "github.com/go-chi/chi",
-    "github.com/go-chi/chi/middleware",
-    "github.com/go-chi/docgen",
     "github.com/go-chi/render",
+    "github.com/gorilla/websocket",
+    "github.com/subosito/gotenv",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
