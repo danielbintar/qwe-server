@@ -70,6 +70,14 @@
   revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
   version = "v1.4.0"
 
+[[projects]]
+  branch = "v2"
+  digest = "1:b6539350da50de0d3c9b83ae587c06b89be9cb5750443bdd887f1c4077f57776"
+  name = "gopkg.in/validator.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "135c24b11c19e52befcae2ec3fca5d9b78c4e98e"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -79,6 +87,7 @@
     "github.com/go-chi/render",
     "github.com/gorilla/websocket",
     "github.com/subosito/gotenv",
+    "gopkg.in/validator.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

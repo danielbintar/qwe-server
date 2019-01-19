@@ -1,44 +1,32 @@
 package controller
 
-import (	
-	"time"
+import (
 	"net/http"
+	"encoding/json"
 
-	"github.com/danielbintar/go-record/db"
+	"github.com/danielbintar/qwe-server/model"
+	"github.com/danielbintar/qwe-server/service/auth"
+
 	"github.com/go-chi/render"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	data := &User{}
-	if err := render.Bind(r, data); err != nil {
+	var form auth.LoginForm
+
+	err := json.NewDecoder(r.Body).Decode(&form)
+	if err != nil {
 		render.Render(w, r, ErrInvalidRequest(err))
 		return
 	}
 
-	if data.Valid() {
-		render.Render(w, r, data)
+
+	userI, errors := auth.Login(form)
+	if errors == nil {
+		byteData, _ := json.Marshal(userI)
+		var user *model.User
+		json.Unmarshal(byteData, &user)
+		render.Render(w, r, user)
 	} else {
 		render.Render(w, r, ErrNotFound)
 	}
-}
-
-type User struct {
-	Id        int       `json:"id"`
-	Username  string    `json:"username"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-func (f *User) Render(w http.ResponseWriter, r *http.Request) error {
-	return nil
-}
-
-func (f *User) Bind(r *http.Request) error {
-	return nil
-}
-
-func (f *User) Valid() bool {
-	err := db.FindBy(&f, []string{"username", "=", f.Username}, []string{"password", "=", f.Password});
-	return err == nil
 }
