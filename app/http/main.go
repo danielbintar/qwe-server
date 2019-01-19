@@ -8,6 +8,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 
+	"github.com/danielbintar/qwe-server/app/websocket"
+
 	"github.com/danielbintar/go-record/db"
 
 	"github.com/subosito/gotenv"
@@ -17,9 +19,11 @@ func main() {
 	gotenv.Load()
 	r := chi.NewRouter()
 
-	r.Use(render.SetContentType(render.ContentTypeJSON))
+	hub := websocket.NewHub()
+	go hub.Run()
 
 	r.Post("/users/sign_in", Login)
+	r.Get("/chat", func(w http.ResponseWriter, r *http.Request) { websocket.ServeWs(hub, w, r) })
 
 	fmt.Println("listen to 3333")
 	http.ListenAndServe(":3333", r)
