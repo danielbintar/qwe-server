@@ -13,6 +13,12 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type UserPosition struct {
+	Id int `json:"id"`
+	X  int `json:"x"`
+	Y  int `json:"y"`
+}
+
 func (f *User) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }

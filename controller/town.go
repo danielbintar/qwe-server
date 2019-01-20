@@ -7,6 +7,7 @@ import (
 
 	townConfig "github.com/danielbintar/qwe-server/config/town"
 	"github.com/danielbintar/qwe-server/model"
+	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -34,5 +35,7 @@ func Town(next http.Handler) http.Handler {
 func FindTown(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	town, _ := ctx.Value("town").(*model.Town)
+	town.Users = repository.GetTownUsers(town.Id)
+
 	render.Render(w, r, town)
 }
