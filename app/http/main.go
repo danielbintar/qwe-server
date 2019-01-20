@@ -17,9 +17,6 @@ func main() {
 	config.Instance()
 	r := chi.NewRouter()
 
-	hub := websocket.NewHub()
-	go hub.Run()
-
 	r.Post("/users/sign_in", controller.Login)
 
 	r.Route("/towns", func(r chi.Router) {
@@ -29,8 +26,7 @@ func main() {
 		})
 	})
 
-
-	r.Get("/chat", func(w http.ResponseWriter, r *http.Request) { websocket.ServeWs(hub, w, r) })
+	websocket.Main(r)
 
 	fmt.Println("listen to 3333")
 	http.ListenAndServe(":3333", r)
