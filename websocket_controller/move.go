@@ -1,17 +1,16 @@
-package websocket
+package websocket_controller
 
 import (
 	"bytes"
 	"log"
 	"net/http"
 	"time"
+	"encoding/json"
+
+	"github.com/danielbintar/qwe-server/model"
+	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/gorilla/websocket"
-)
-
-var (
-	newline = []byte{'\n'}
-	space   = []byte{' '}
 )
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -19,7 +18,7 @@ var (
 // The application runs readPump in a per-connection goroutine. The application
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
-func (c *Client) readChat() {
+func (c *Client) readMove() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -36,6 +35,9 @@ func (c *Client) readChat() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		var userPosition *model.UserPosition
+		json.Unmarshal(message, &userPosition)
+		repository.SetTownUser(1, userPosition.Id, userPosition.X, userPosition.Y)
 		c.hub.broadcast <- message
 	}
 }
@@ -45,7 +47,7 @@ func (c *Client) readChat() {
 // A goroutine running writePump is started for each connection. The
 // application ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
-func (c *Client) writeChat() {
+func (c *Client) writeMove() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -86,7 +88,7 @@ func (c *Client) writeChat() {
 	}
 }
 
-func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func ManageMove(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil { panic(err) }
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
@@ -94,6 +96,6 @@ func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.writeChat()
-	go client.readChat()
+	go client.writeMove()
+	go client.readMove()
 }

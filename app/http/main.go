@@ -23,6 +23,7 @@ func main() {
 		r.Route("/{townId}", func(r chi.Router) {
 			r.Use(controller.Town)
 			r.Get("/", controller.FindTown)
+			r.Post("/enter", controller.EnterTown)
 		})
 	})
 
