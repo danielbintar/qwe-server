@@ -9,11 +9,11 @@ import (
 	"github.com/danielbintar/qwe-server/model"
 )
 
-func townUsersKey(id int) string {
-	return "towns:" + strconv.Itoa(id) + ":users"
+func townUsersKey(id uint) string {
+	return "towns:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
-func GetTownUsers(id int) []model.UserPosition {
+func GetTownUsers(id uint) []model.UserPosition {
 	var users []model.UserPosition
 	r, err := config.RedisInstance().HGetAll(townUsersKey(id)).Result()
 	if err != nil {
@@ -24,27 +24,28 @@ func GetTownUsers(id int) []model.UserPosition {
 		for k, v := range r {
 			var user model.UserPosition
 			json.Unmarshal([]byte(v), &user)
-			user.Id, _ = strconv.Atoi(k)
+			u64, _ := strconv.ParseUint(k, 10, 32)
+			user.Id = uint(u64)
 			users = append(users, user)
 		}
 	}
 	return users
 }
 
-func SetTownUser(townId int, userId int, x int, y int) {
-	position := map[string]int{
+func SetTownUser(townId uint, userId uint, x uint, y uint) {
+	position := map[string]uint{
 		"x": x,
 		"y": y,
 	}
 
 	positionJson, _ := json.Marshal(position)
 
-	err := config.RedisInstance().HSet(townUsersKey(townId), strconv.Itoa(userId), positionJson).Err()
+	err := config.RedisInstance().HSet(townUsersKey(townId), strconv.FormatUint(uint64(userId), 10), positionJson).Err()
 	if err != nil { panic(err) }
 }
 
 
-func FindTown(id int) *model.Town {
+func FindTown(id uint) *model.Town {
 	for _, town := range town_config.Instance().Towns {
 		if town.Id == id {
 			return town

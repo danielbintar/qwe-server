@@ -16,11 +16,12 @@ import (
 
 func Town(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		townId, err := strconv.Atoi(chi.URLParam(r, "townId"))
+		u64, err := strconv.ParseUint(chi.URLParam(r, "townId"), 10, 32)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
+		townId := uint(u64)
 
 		town := repository.FindTown(townId)
 		if town.Name == "" {
@@ -55,7 +56,6 @@ func Town(next http.Handler) http.Handler {
 		var user *model.User
 		json.Unmarshal(byteData, &user)
 		ctx = context.WithValue(ctx, "user", user)
-
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

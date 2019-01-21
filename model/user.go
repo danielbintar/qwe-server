@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Id        int       `json:"id"`
+	Id        uint      `json:"id"`
 	Username  string    `json:"username"`
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
@@ -14,9 +14,9 @@ type User struct {
 }
 
 type UserPosition struct {
-	Id int `json:"id"`
-	X  int `json:"x"`
-	Y  int `json:"y"`
+	Id uint `json:"id"`
+	X  uint `json:"x"`
+	Y  uint `json:"y"`
 }
 
 func (f *User) Render(w http.ResponseWriter, r *http.Request) error {
