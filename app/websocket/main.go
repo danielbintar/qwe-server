@@ -13,7 +13,6 @@ func Main(r *chi.Mux) {
 	go chatHub.Run()
 	r.Get("/chat", func(w http.ResponseWriter, r *http.Request) { controller.ManageChat(chatHub, w, r) })
 
-
 	moveHub := controller.NewHub()
 	go moveHub.Run()
 	r.Get("/move", func(w http.ResponseWriter, r *http.Request) { controller.ManageMove(moveHub, w, r) })

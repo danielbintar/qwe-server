@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	townConfig "github.com/danielbintar/qwe-server/config/town"
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
 	"github.com/danielbintar/qwe-server/service/auth"
@@ -23,7 +22,7 @@ func Town(next http.Handler) http.Handler {
 			return
 		}
 
-		town  := townConfig.Find(townId)
+		town := repository.FindTown(townId)
 		if town.Name == "" {
 			http.Error(w, http.StatusText(404), 404)
 			return

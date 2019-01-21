@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/danielbintar/qwe-server/config"
+	town_config "github.com/danielbintar/qwe-server/config/town"
 	"github.com/danielbintar/qwe-server/model"
 )
 
@@ -40,4 +41,15 @@ func SetTownUser(townId int, userId int, x int, y int) {
 
 	err := config.RedisInstance().HSet(townUsersKey(townId), strconv.Itoa(userId), positionJson).Err()
 	if err != nil { panic(err) }
+}
+
+
+func FindTown(id int) *model.Town {
+	for _, town := range town_config.Instance().Towns {
+		if town.Id == id {
+			return town
+		}
+	}
+
+	return &model.Town{}
 }

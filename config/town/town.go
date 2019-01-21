@@ -28,13 +28,3 @@ func Instance() *TownConfig {
 
 	return config
 }
-
-func Find(id int) *model.Town {
-	for _, town := range Instance().Towns {
-		if town.Id == id {
-			return town
-		}
-	}
-
-	return &model.Town{}
-}
