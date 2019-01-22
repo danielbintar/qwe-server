@@ -1,0 +1,7 @@
+towns:
+  -
+    id: 1
+    name: cimahi
+    position:
+      x: 5
+      y: 5

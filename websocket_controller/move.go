@@ -1,55 +1,24 @@
-package websocket
+package websocket_controller
 
 import (
 	"bytes"
 	"log"
 	"net/http"
 	"time"
+	"encoding/json"
+
+	"github.com/danielbintar/qwe-server/model"
+	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/gorilla/websocket"
 )
-
-const (
-	// Time allowed to write a message to the peer.
-	writeWait = 10 * time.Second
-
-	// Time allowed to read the next pong message from the peer.
-	pongWait = 60 * time.Second
-
-	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 9) / 10
-
-	// Maximum message size allowed from peer.
-	maxMessageSize = 512
-)
-
-var (
-	newline = []byte{'\n'}
-	space   = []byte{' '}
-)
-
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
-// Client is a middleman between the websocket connection and the hub.
-type Client struct {
-	hub *Hub
-
-	// The websocket connection.
-	conn *websocket.Conn
-
-	// Buffered channel of outbound messages.
-	send chan []byte
-}
 
 // readPump pumps messages from the websocket connection to the hub.
 //
 // The application runs readPump in a per-connection goroutine. The application
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
-func (c *Client) readPump() {
+func (c *Client) readMove() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -66,6 +35,9 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		var userPosition *model.UserPosition
+		json.Unmarshal(message, &userPosition)
+		repository.SetTownUser(1, userPosition.Id, userPosition.X, userPosition.Y)
 		c.hub.broadcast <- message
 	}
 }
@@ -75,7 +47,7 @@ func (c *Client) readPump() {
 // A goroutine running writePump is started for each connection. The
 // application ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
-func (c *Client) writePump() {
+func (c *Client) writeMove() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -116,19 +88,14 @@ func (c *Client) writePump() {
 	}
 }
 
-// serveWs handles websocket requests from the peer.
-func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func ManageMove(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("here")
-		log.Println(err)
-		return
-	}
+	if err != nil { panic(err) }
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.writePump()
-	go client.readPump()
+	go client.writeMove()
+	go client.readMove()
 }

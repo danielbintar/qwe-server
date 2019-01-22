@@ -39,6 +39,22 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:ad53d1f710522a38d1f0e5e0a55a194b1c6b2cd8e84313568e43523271f0cf62"
+  name = "github.com/go-redis/redis"
+  packages = [
+    ".",
+    "internal",
+    "internal/consistenthash",
+    "internal/hashtag",
+    "internal/pool",
+    "internal/proto",
+    "internal/util",
+  ]
+  pruneopts = "UT"
+  revision = "22be8a3eaf992c828cecb69dc07348313bf08d2e"
+  version = "v6.15.1"
+
+[[projects]]
   digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
@@ -78,6 +94,14 @@
   pruneopts = "UT"
   revision = "135c24b11c19e52befcae2ec3fca5d9b78c4e98e"
 
+[[projects]]
+  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -85,9 +109,11 @@
     "github.com/danielbintar/go-record/db",
     "github.com/go-chi/chi",
     "github.com/go-chi/render",
+    "github.com/go-redis/redis",
     "github.com/gorilla/websocket",
     "github.com/subosito/gotenv",
     "gopkg.in/validator.v2",
+    "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
