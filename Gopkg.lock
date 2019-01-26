@@ -3,7 +3,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9d36999559c7eef4ebead80dbb483b067232e81b7a5ec0e5fbae1d7b2504e77b"
+  digest = "1:2058a525384df61157029a9261c10e705bdc5f4aa5bbf6a5bba5942be318d7d7"
   name = "github.com/danielbintar/go-record"
   packages = [
     "connections",
@@ -12,7 +12,7 @@
     "structs",
   ]
   pruneopts = "UT"
-  revision = "831b9fd272adbd55950ed81d3799a3a5fdcbca63"
+  revision = "ae683271c1f83b202e6935be50a60891a5a0e9d0"
 
 [[projects]]
   branch = "master"
@@ -27,8 +27,8 @@
   name = "github.com/go-chi/chi"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e95203758b2a6ec24a8e97124d5719ffe5ec1374"
-  version = "v4.0.0"
+  revision = "1a6bb108ccf279c8dac6f9bad857d773b4f9b421"
+  version = "v4.0.1"
 
 [[projects]]
   digest = "1:54d7b4b9ab2bb2bae35b55eea900bc8fe15cba05a95fc78bf7fd7b82a9a07afa"
@@ -79,6 +79,17 @@
   version = "v1.1.1"
 
 [[projects]]
+  branch = "master"
+  digest = "1:1ecf2a49df33be51e757d0033d5d51d5f784f35f68e5a38f797b2d3f03357d71"
+  name = "golang.org/x/crypto"
+  packages = [
+    "bcrypt",
+    "blowfish",
+  ]
+  pruneopts = "UT"
+  revision = "057139ce5d2bdbe6fe73c53679e24e9cf007f637"
+
+[[projects]]
   digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
   name = "google.golang.org/appengine"
   packages = ["cloudsql"]
@@ -112,6 +123,7 @@
     "github.com/go-redis/redis",
     "github.com/gorilla/websocket",
     "github.com/subosito/gotenv",
+    "golang.org/x/crypto/bcrypt",
     "gopkg.in/validator.v2",
     "gopkg.in/yaml.v2",
   ]
