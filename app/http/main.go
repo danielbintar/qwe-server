@@ -21,6 +21,7 @@ func main() {
 
 	r.Route("/towns", func(r chi.Router) {
 		r.Route("/{townId}", func(r chi.Router) {
+			r.Use(controller.Authenticated)
 			r.Use(controller.Town)
 			r.Get("/", controller.FindTown)
 			r.Post("/enter", controller.EnterTown)
