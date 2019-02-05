@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/render"
 )
 
-func Register(w http.ResponseWriter, r *http.Request) {
+func Create(w http.ResponseWriter, r *http.Request) {
 	var form user.CreateForm
 
 	err := json.NewDecoder(r.Body).Decode(&form)

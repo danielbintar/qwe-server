@@ -19,7 +19,7 @@ func main() {
 
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/sign_in", controller.Login)
-		r.Post("/sign_up", controller.Register)
+		r.Post("/sign_up", controller.Create)
 	})
 
 	r.Route("/towns", func(r chi.Router) {
