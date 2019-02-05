@@ -17,7 +17,10 @@ func main() {
 	config.Instance()
 	r := chi.NewRouter()
 
-	r.Post("/users/sign_in", controller.Login)
+	r.Route("/users", func(r chi.Router) {
+		r.Post("/sign_in", controller.Login)
+		r.Post("/sign_up", controller.CreateUser)
+	})
 
 	r.Route("/towns", func(r chi.Router) {
 		r.Route("/{townId}", func(r chi.Router) {
