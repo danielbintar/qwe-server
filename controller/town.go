@@ -12,7 +12,6 @@ import (
 	"github.com/go-chi/render"
 )
 
-
 func Town(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u64, err := strconv.ParseUint(chi.URLParam(r, "townId"), 10, 32)
