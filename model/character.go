@@ -13,6 +13,18 @@ type Character struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (f *Character) Render(w http.ResponseWriter, r *http.Request) error {
+type CharacterSerializer struct {
+	ID        uint      `json:"id"`
+	Name      string    `json:"name"`
+}
+
+func (f *CharacterSerializer) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
+}
+
+func (self *Character) Serialize() *CharacterSerializer {
+	return &CharacterSerializer{
+		ID: self.ID,
+		Name: self.Name,
+	}
 }

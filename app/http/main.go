@@ -22,6 +22,11 @@ func main() {
 		r.Post("/sign_up", controller.CreateUser)
 	})
 
+	r.Route("/my-characters", func(r chi.Router) {
+		r.Use(controller.Authenticated)
+		r.Get("/", controller.GetMyCharacters)
+	})
+
 	r.Route("/towns", func(r chi.Router) {
 		r.Route("/{townID}", func(r chi.Router) {
 			r.Use(controller.Authenticated)
