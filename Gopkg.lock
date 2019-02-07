@@ -2,27 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  digest = "1:2058a525384df61157029a9261c10e705bdc5f4aa5bbf6a5bba5942be318d7d7"
-  name = "github.com/danielbintar/go-record"
-  packages = [
-    "connections",
-    "db",
-    "normalizer",
-    "structs",
-  ]
-  pruneopts = "UT"
-  revision = "ae683271c1f83b202e6935be50a60891a5a0e9d0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:d91c55b4b4fb7c79a1f5ab5b8a4357699bd8c198749336f4cae6c452dfb2f5fb"
-  name = "github.com/danielbintar/go-string"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "9076a018a697f22decee5de31bf058f7799e89f6"
-
-[[projects]]
   digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
@@ -144,7 +123,6 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/danielbintar/go-record/db",
     "github.com/dgrijalva/jwt-go",
     "github.com/go-chi/chi",
     "github.com/go-chi/render",
