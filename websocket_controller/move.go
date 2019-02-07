@@ -37,7 +37,7 @@ func (c *Client) readMove() {
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		var userPosition *model.UserPosition
 		json.Unmarshal(message, &userPosition)
-		repository.SetTownUser(1, userPosition.Id, userPosition.X, userPosition.Y)
+		repository.SetTownUser(1, userPosition.ID, userPosition.X, userPosition.Y)
 		c.hub.broadcast <- message
 	}
 }

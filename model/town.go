@@ -8,7 +8,7 @@ type position struct {
 }
 
 type Town struct {
-	Id       uint           `yaml:"id"        json:"id"`
+	ID       uint           `yaml:"id"        json:"id"`
 	Name     string         `yaml:"name"      json:"name"`
 	Position position       `yaml:"position"  json:"position"`
 	Users    []UserPosition `                 json:"users"`

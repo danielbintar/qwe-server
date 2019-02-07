@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Id        uint      `json:"id"`
+	ID        uint      `json:"id"`
 	Username  string    `json:"username"`
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
@@ -14,7 +14,7 @@ type User struct {
 }
 
 type UserPosition struct {
-	Id uint `json:"id"`
+	ID uint `json:"id"`
 	X  uint `json:"x"`
 	Y  uint `json:"y"`
 }

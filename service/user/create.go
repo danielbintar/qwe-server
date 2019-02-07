@@ -5,7 +5,7 @@ import (
 
 	"github.com/danielbintar/qwe-server/model"
 
-	"github.com/danielbintar/go-record/db"
+	"github.com/danielbintar/qwe-server/db"
 
 	"gopkg.in/validator.v2"
 
@@ -32,11 +32,9 @@ func (self *CreateForm) Validate() []error {
 }
 
 func (self *CreateForm) Perform() (interface{}, []error) {
-	user := &model.User{}
+	user := &model.User{Username: self.Username}
 
-	err := db.FindBy(&user, []string{"username", "=", self.Username})
-
-	if err == nil {
+	if !db.DB().Where(&user).First(&user).RecordNotFound() {
 		return user, []error{errors.New("username already used")}
 	}
 
@@ -44,11 +42,7 @@ func (self *CreateForm) Perform() (interface{}, []error) {
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(self.Password), 0)
 	user.Username = self.Username
 	user.Password = string(encryptedPassword)
-	userI, err := db.Insert(&user)
+	db.DB().Create(&user)
 
-	if err != nil {
-		return nil, []error{err}
-	}
-
-	return userI, nil
+	return user, nil
 }
