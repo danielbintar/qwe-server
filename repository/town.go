@@ -25,7 +25,7 @@ func GetTownUsers(id uint) []model.UserPosition {
 			var user model.UserPosition
 			json.Unmarshal([]byte(v), &user)
 			u64, _ := strconv.ParseUint(k, 10, 32)
-			user.Id = uint(u64)
+			user.ID = uint(u64)
 			users = append(users, user)
 		}
 	}

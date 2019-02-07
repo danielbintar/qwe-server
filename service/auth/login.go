@@ -5,7 +5,7 @@ import (
 
 	"github.com/danielbintar/qwe-server/model"
 
-	"github.com/danielbintar/go-record/db"
+	"github.com/danielbintar/qwe-server/db"
 
 	"gopkg.in/validator.v2"
 
@@ -32,14 +32,10 @@ func (self *LoginForm) Validate() []error {
 }
 
 func (self *LoginForm) Perform() (interface{}, []error) {
-	user := &model.User{}
-	err := db.FindBy(&user, []string{"username", "=", self.Username})
+	user := &model.User{Username: self.Username}
+	db.DB().Where(&user).First(&user)
 
-	if err != nil {
-		return user, []error{err}
-	}
-
-	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(self.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(self.Password)); err != nil {
 		return user, []error{errors.New("not found")}
 	}
 

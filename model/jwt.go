@@ -13,7 +13,7 @@ type Jwt struct {
 
 func NewJwt(user *User) *Jwt {
 	return &Jwt{
-		UserId: user.Id,
+		UserId: user.ID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Unix() + 7200,
 		},
