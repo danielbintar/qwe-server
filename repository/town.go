@@ -32,7 +32,7 @@ func GetTownUsers(id uint) []model.UserPosition {
 	return users
 }
 
-func SetTownUser(townId uint, userId uint, x uint, y uint) {
+func SetTownUser(townID uint, userID uint, x uint, y uint) {
 	position := map[string]uint{
 		"x": x,
 		"y": y,
@@ -40,14 +40,14 @@ func SetTownUser(townId uint, userId uint, x uint, y uint) {
 
 	positionJson, _ := json.Marshal(position)
 
-	err := config.RedisInstance().HSet(townUsersKey(townId), strconv.FormatUint(uint64(userId), 10), positionJson).Err()
+	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(userID), 10), positionJson).Err()
 	if err != nil { panic(err) }
 }
 
 
 func FindTown(id uint) *model.Town {
 	for _, town := range town_config.Instance().Towns {
-		if town.Id == id {
+		if town.ID == id {
 			return town
 		}
 	}

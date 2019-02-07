@@ -14,14 +14,14 @@ import (
 
 func Town(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		u64, err := strconv.ParseUint(chi.URLParam(r, "townId"), 10, 32)
+		u64, err := strconv.ParseUint(chi.URLParam(r, "townID"), 10, 32)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
-		townId := uint(u64)
+		townID := uint(u64)
 
-		town := repository.FindTown(townId)
+		town := repository.FindTown(townID)
 		if town.Name == "" {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -36,7 +36,7 @@ func Town(next http.Handler) http.Handler {
 func FindTown(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	town, _ := ctx.Value("town").(*model.Town)
-	town.Users = repository.GetTownUsers(town.Id)
+	town.Users = repository.GetTownUsers(town.ID)
 
 	render.Render(w, r, town)
 }
@@ -45,9 +45,9 @@ func EnterTown(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	town, _ := ctx.Value("town").(*model.Town)
 
-	currentUserId := ctx.Value("jwt").(*model.Jwt).UserId
-	repository.SetTownUser(town.Id, currentUserId, town.Position.X, town.Position.Y)
+	currentUserID := ctx.Value("jwt").(*model.Jwt).UserID
+	repository.SetTownUser(town.ID, currentUserID, town.Position.X, town.Position.Y)
 
-	town.Users = repository.GetTownUsers(town.Id)
+	town.Users = repository.GetTownUsers(town.ID)
 	render.Render(w, r, town)
 }
