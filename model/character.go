@@ -3,6 +3,8 @@ package model
 import (
 	"time"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 type Character struct {
@@ -22,7 +24,7 @@ func (f *CharacterSerializer) Render(w http.ResponseWriter, r *http.Request) err
 	return nil
 }
 
-func (self *Character) Serialize() *CharacterSerializer {
+func (self *Character) Serialize() render.Renderer {
 	return &CharacterSerializer{
 		ID: self.ID,
 		Name: self.Name,

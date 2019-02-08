@@ -36,7 +36,7 @@ func SerializeList(values interface{}) []render.Renderer {
 	list := []render.Renderer{}
 	s := reflect.ValueOf(values)
 	for i := 0; i < s.Len(); i++ {
-		list = append(list, s.Index(i).MethodByName("Serialize").Interface().(render.Renderer))
+		list = append(list, s.Index(i).MethodByName("Serialize").Interface().(func() render.Renderer)())
 	}
 	return list
 }

@@ -25,6 +25,7 @@ func main() {
 	r.Route("/my-characters", func(r chi.Router) {
 		r.Use(controller.Authenticated)
 		r.Get("/", controller.GetMyCharacters)
+		r.Post("/", controller.CreateMyCharacter)
 	})
 
 	r.Route("/towns", func(r chi.Router) {
