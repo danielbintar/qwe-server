@@ -40,7 +40,7 @@ func (self *CreateForm) Validate() []error {
 func (self *CreateForm) AlreadyAtLimit() bool {
 	var charactersCount uint
 	character := &model.Character{UserID: self.UserID}
-	db.DB().Model(character).Count(&charactersCount)
+	db.DB().Model(character).Where(character).Count(&charactersCount)
 
 	return charactersCount == constant.MY_CHARACTERS_LIMIT
 }
