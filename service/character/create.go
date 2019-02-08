@@ -1,7 +1,6 @@
 package character
 
 import (
-	"fmt"
 	"errors"
 
 	"github.com/danielbintar/qwe-server/model"
@@ -41,7 +40,7 @@ func (self *CreateForm) Validate() []error {
 func (self *CreateForm) AlreadyAtLimit() bool {
 	var charactersCount uint
 	character := &model.Character{UserID: self.UserID}
-	db.DB().Where(character).Count(&charactersCount)
+	db.DB().Model(character).Count(&charactersCount)
 
 	return charactersCount == constant.MY_CHARACTERS_LIMIT
 }

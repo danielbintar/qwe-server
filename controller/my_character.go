@@ -34,10 +34,7 @@ func CreateMyCharacter(w http.ResponseWriter, r *http.Request) {
 
 	characterI, errors := characterService.Create(form)
 	if errors == nil {
-		byteData, _ := json.Marshal(characterI)
-		var character *model.Character
-		json.Unmarshal(byteData, &character)
-
+		character := characterI.(*model.Character)
 		render.Render(w, r, character.Serialize())
 	} else {
 		render.Render(w, r, ErrInvalidRequest(errors[0]))
