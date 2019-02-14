@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"encoding/json"
+
+	"github.com/danielbintar/qwe-server/model"
 
 	"github.com/gorilla/websocket"
 )
@@ -36,7 +39,11 @@ func (c *Client) readChat() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		c.hub.broadcast <- message
+		var chat *model.Chat
+		json.Unmarshal(message, &chat)
+		chat.Sender = c.user
+		encodedChat, _ := json.Marshal(chat)
+		c.hub.broadcast <- []byte(string(encodedChat))
 	}
 }
 
@@ -89,7 +96,11 @@ func (c *Client) writeChat() {
 func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil { panic(err) }
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+
+	ctx := r.Context()
+	username := ctx.Value("jwt").(*model.Jwt).Username
+
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), user: username}
 	client.hub.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in

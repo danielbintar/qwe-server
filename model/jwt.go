@@ -7,13 +7,15 @@ import (
 )
 
 type Jwt struct {
-	UserID uint
+	UserID   uint
+	Username string
 	jwt.StandardClaims
 }
 
 func NewJwt(user *User) *Jwt {
 	return &Jwt{
 		UserID: user.ID,
+		Username: user.Username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Unix() + 7200,
 		},
