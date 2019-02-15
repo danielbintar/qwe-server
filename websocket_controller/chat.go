@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 
 	"github.com/danielbintar/qwe-server/model"
+	"github.com/danielbintar/qwe-server/db"
+	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/gorilla/websocket"
 )
@@ -17,11 +19,6 @@ var (
 	space   = []byte{' '}
 )
 
-// readPump pumps messages from the websocket connection to the hub.
-//
-// The application runs readPump in a per-connection goroutine. The application
-// ensures that there is at most one reader on a connection by executing all
-// reads from this goroutine.
 func (c *Client) readChat() {
 	defer func() {
 		c.hub.unregister <- c
@@ -47,11 +44,6 @@ func (c *Client) readChat() {
 	}
 }
 
-// writePump pumps messages from the hub to the websocket connection.
-//
-// A goroutine running writePump is started for each connection. The
-// application ensures that there is at most one writer to a connection by
-// executing all writes from this goroutine.
 func (c *Client) writeChat() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -98,9 +90,12 @@ func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	if err != nil { panic(err) }
 
 	ctx := r.Context()
-	username := ctx.Value("jwt").(*model.Jwt).Username
+	userID := ctx.Value("jwt").(*model.Jwt).UserID
+	characterID := repository.GetCurrentCharacter(userID)
+	character := &model.Character{ID: *characterID}
+	db.DB().Where(&character).First(&character)
 
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), user: username}
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), user: character.Name}
 	client.hub.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in
