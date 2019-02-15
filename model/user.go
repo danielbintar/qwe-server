@@ -13,12 +13,36 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+func (f *User) Serialize() *UserSerializer {
+	return &UserSerializer {
+		ID: f.ID,
+		Username: f.Username,
+		CreatedAt: f.CreatedAt,
+		UpdatedAt: f.UpdatedAt,
+	}
+}
+
 type UserPosition struct {
 	ID uint `json:"id"`
 	X  uint `json:"x"`
 	Y  uint `json:"y"`
 }
 
-func (f *User) Render(w http.ResponseWriter, r *http.Request) error {
+type UserSerializer struct {
+	ID        uint      `json:"id"`
+	Username  string    `json:"username"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (f *UserSerializer) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+type CurrentCharacter struct {
+	CharacterID *uint `json:"character_id"`
+}
+
+func (f *CurrentCharacter) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
