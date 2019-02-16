@@ -8,15 +8,15 @@ type position struct {
 }
 
 type Town struct {
-	ID       uint           `yaml:"id"        json:"id"`
-	Name     string         `yaml:"name"      json:"name"`
-	Position position       `yaml:"position"  json:"position"`
-	Users    []UserPosition `                 json:"users"`
+	ID                 uint                 `yaml:"id"        json:"id"`
+	Name               string               `yaml:"name"      json:"name"`
+	Position           position             `yaml:"position"  json:"position"`
+	CharactersPosition []*CharacterPosition `                 json:"characters"`
 }
 
 func (f *Town) Render(w http.ResponseWriter, r *http.Request) error {
-	if f.Users == nil {
-		f.Users = []UserPosition{}
+	if f.CharactersPosition == nil {
+		f.CharactersPosition = []*CharacterPosition{}
 	}
 
 	return nil

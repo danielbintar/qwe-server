@@ -30,3 +30,9 @@ func (self *Character) Serialize() render.Renderer {
 		Name: self.Name,
 	}
 }
+
+type CharacterPosition struct {
+	ID uint `json:"id"`
+	X  uint `json:"x"`
+	Y  uint `json:"y"`
+}

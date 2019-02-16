@@ -13,8 +13,8 @@ func townUsersKey(id uint) string {
 	return "towns:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
-func GetTownUsers(id uint) []model.UserPosition {
-	var users []model.UserPosition
+func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
+	var positions []*model.CharacterPosition
 	r, err := config.RedisInstance().HGetAll(townUsersKey(id)).Result()
 	if err != nil {
 		if err.Error() != "redis: nil" {
@@ -22,25 +22,25 @@ func GetTownUsers(id uint) []model.UserPosition {
 		}
 	} else {
 		for k, v := range r {
-			var user model.UserPosition
-			json.Unmarshal([]byte(v), &user)
+			var position *model.CharacterPosition
+			json.Unmarshal([]byte(v), &position)
 			u64, _ := strconv.ParseUint(k, 10, 32)
-			user.ID = uint(u64)
-			users = append(users, user)
+			position.ID = uint(u64)
+			positions = append(positions, position)
 		}
 	}
-	return users
+	return positions
 }
 
-func SetTownUser(townID uint, userID uint, x uint, y uint) {
-	position := map[string]uint{
-		"x": x,
-		"y": y,
+func SetTownCharacterPosition(townID uint, position *model.CharacterPosition) {
+	coordinate := map[string]uint{
+		"x": position.X,
+		"y": position.Y,
 	}
 
-	positionJson, _ := json.Marshal(position)
+	coordinateJson, _ := json.Marshal(coordinate)
 
-	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(userID), 10), positionJson).Err()
+	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(position.ID), 10), coordinateJson).Err()
 	if err != nil { panic(err) }
 }
 

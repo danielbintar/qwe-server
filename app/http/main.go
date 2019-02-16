@@ -45,7 +45,6 @@ func main() {
 			r.Use(controller.Authenticated)
 			r.Use(controller.Town)
 			r.Get("/", controller.FindTown)
-			r.Post("/enter", controller.EnterTown)
 		})
 	})
 

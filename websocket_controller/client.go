@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+
+	"github.com/danielbintar/qwe-server/model"
 )
 
 const (
@@ -29,7 +31,7 @@ var upgrader = websocket.Upgrader{
 type Client struct {
 	hub *Hub
 
-	user string
+	character model.Character
 
 	// The websocket connection.
 	conn *websocket.Conn
