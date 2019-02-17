@@ -13,11 +13,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// readPump pumps messages from the websocket connection to the hub.
-//
-// The application runs readPump in a per-connection goroutine. The application
-// ensures that there is at most one reader on a connection by executing all
-// reads from this goroutine.
 func (c *Client) readMove() {
 	defer func() {
 		c.hub.unregister <- c
@@ -35,18 +30,14 @@ func (c *Client) readMove() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		var userPosition *model.UserPosition
-		json.Unmarshal(message, &userPosition)
-		repository.SetTownUser(1, userPosition.ID, userPosition.X, userPosition.Y)
-		c.hub.broadcast <- message
+		var movement *model.CharacterMovement
+		json.Unmarshal(message, &movement)
+		position := repository.MovingCharacter(1, movement)
+		encodedPosition, _ := json.Marshal(position)
+		c.hub.broadcast <- []byte(string(encodedPosition))
 	}
 }
 
-// writePump pumps messages from the hub to the websocket connection.
-//
-// A goroutine running writePump is started for each connection. The
-// application ensures that there is at most one writer to a connection by
-// executing all writes from this goroutine.
 func (c *Client) writeMove() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {

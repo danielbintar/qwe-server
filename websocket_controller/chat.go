@@ -38,7 +38,7 @@ func (c *Client) readChat() {
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		var chat *model.Chat
 		json.Unmarshal(message, &chat)
-		chat.Sender = c.user
+		chat.Sender = c.character.Name
 		encodedChat, _ := json.Marshal(chat)
 		c.hub.broadcast <- []byte(string(encodedChat))
 	}
@@ -95,7 +95,7 @@ func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	character := &model.Character{ID: *characterID}
 	db.DB().Where(&character).First(&character)
 
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), user: character.Name}
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), character: *character}
 	client.hub.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in

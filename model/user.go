@@ -22,12 +22,6 @@ func (f *User) Serialize() *UserSerializer {
 	}
 }
 
-type UserPosition struct {
-	ID uint `json:"id"`
-	X  uint `json:"x"`
-	Y  uint `json:"y"`
-}
-
 type UserSerializer struct {
 	ID        uint      `json:"id"`
 	Username  string    `json:"username"`
