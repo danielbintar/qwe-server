@@ -1,5 +1,7 @@
 package websocket_controller
 
+import "sync"
+
 type Hub struct {
 	// Registered clients.
 	clients map[*Client]bool
@@ -14,7 +16,29 @@ type Hub struct {
 	unregister chan *Client
 }
 
-func NewHub() *Hub {
+var (
+	chatHub *Hub
+	chatHubMutex sync.Once
+
+	moveHub *Hub
+	moveHubMutex sync.Once
+)
+
+func ChatHubInstance() *Hub {
+	chatHubMutex.Do(func() {
+		chatHub = newHub()
+	})
+	return chatHub
+}
+
+func MoveHubInstance() *Hub {
+	moveHubMutex.Do(func() {
+		moveHub = newHub()
+	})
+	return moveHub
+}
+
+func newHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
