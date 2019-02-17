@@ -30,10 +30,11 @@ func (c *Client) readMove() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		var position *model.CharacterPosition
-		json.Unmarshal(message, &position)
-		repository.SetTownCharacterPosition(1, position)
-		c.hub.broadcast <- message
+		var movement *model.CharacterMovement
+		json.Unmarshal(message, &movement)
+		position := repository.MovingCharacter(1, movement)
+		encodedPosition, _ := json.Marshal(position)
+		c.hub.broadcast <- []byte(string(encodedPosition))
 	}
 }
 
