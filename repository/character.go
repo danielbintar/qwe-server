@@ -31,7 +31,7 @@ func SetCurrentCharacter(userID uint, characterID uint) {
 	err := config.RedisInstance().HSet(currentCharacterKey(), strconv.FormatUint(uint64(userID), 10), characterID).Err()
 	if err != nil { panic(err) }
 
-	if !characterHasPosition(userID) {
+	if !characterHasPosition(characterID) {
 		setDefaultPosition(characterID)
 	}
 }
