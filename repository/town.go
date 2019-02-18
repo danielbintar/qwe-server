@@ -13,6 +13,11 @@ func townUsersKey(id uint) string {
 	return "towns:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
+func UnsetCharacterTownPosition(characterID uint, townID uint) {
+	err := config.RedisInstance().HDel(townUsersKey(townID), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
 func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
 	var positions []*model.CharacterPosition
 	r, err := config.RedisInstance().HGetAll(townUsersKey(id)).Result()
@@ -46,6 +51,17 @@ func getTownCharacterPosition(id uint, characterID uint) *model.CharacterPositio
 		position.ID = characterID
 	}
 	return position
+}
+
+func SetTownCharacterPosition(id uint, position *model.CharacterPosition) {
+	coordinate := map[string]uint{
+		"x": position.X,
+		"y": position.Y,
+	}
+
+	coordinateJson, _ := json.Marshal(coordinate)
+	err := config.RedisInstance().HSet(townUsersKey(id), strconv.FormatUint(uint64(position.ID), 10), coordinateJson).Err()
+	if err != nil { panic(err) }
 }
 
 func setDefaultPosition(characterID uint) {

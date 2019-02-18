@@ -33,7 +33,7 @@ func GetMyUser(w http.ResponseWriter, r *http.Request) {
 func GetMyUserCurrentCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	currentUser := ctx.Value("user").(*model.User)
-	currentCharacterID := repository.GetCurrentCharacter(currentUser.ID)
+	currentCharacterID := repository.GetPlayingCharacter(currentUser.ID)
 
 	currentCharacter := &model.CurrentCharacter{
 		CharacterID: currentCharacterID,

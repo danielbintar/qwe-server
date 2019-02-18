@@ -1,0 +1,9 @@
+regions:
+  -
+    id: 1
+    name: southeast asia
+    towns:
+      id: 1
+      position:
+        x: 20
+        y: 20

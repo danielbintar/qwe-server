@@ -5,3 +5,15 @@ import "github.com/danielbintar/qwe-server/service"
 var Create = func(form CreateForm) (interface{}, []error) {
 	return service.Start(&form)
 }
+
+var Play = func(form PlayForm) (interface{}, []error) {
+	return service.Start(&form)
+}
+
+var EnterTown = func(form EnterTownForm) (interface{}, []error) {
+	return service.Start(&form)
+}
+
+var LeaveTown = func(form LeaveTownForm) (interface{}, []error) {
+	return service.Start(&form)
+}

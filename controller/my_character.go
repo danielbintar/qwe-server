@@ -8,8 +8,7 @@ import (
 
 	"github.com/danielbintar/qwe-server/db"
 	"github.com/danielbintar/qwe-server/model"
-	characterService "github.com/danielbintar/qwe-server/service/character"
-	"github.com/danielbintar/qwe-server/repository"
+	"github.com/danielbintar/qwe-server/service/character"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -59,13 +58,26 @@ func PlayMyCharacter(w http.ResponseWriter, r *http.Request) {
 	currentUserID := ctx.Value("jwt").(*model.Jwt).UserID
 	characterID := ctx.Value("character").(*model.Character).ID
 
-	repository.SetCurrentCharacter(currentUserID, characterID)
+	form := character.PlayForm {
+		UserID: currentUserID,
+		CharacterID: characterID,
+	}
+
+	character.Play(form)
+}
+
+func LeaveTownMyCharacter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	characterID := ctx.Value("character").(*model.Character).ID
+	form := character.LeaveTownForm{ID: characterID}
+
+	character.LeaveTown(form)
 }
 
 func CreateMyCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	currentUserID := ctx.Value("jwt").(*model.Jwt).UserID
-	form := characterService.CreateForm{UserID: currentUserID}
+	form := character.CreateForm{UserID: currentUserID}
 
 	err := json.NewDecoder(r.Body).Decode(&form)
 	if err != nil {
@@ -73,7 +85,7 @@ func CreateMyCharacter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	characterI, errors := characterService.Create(form)
+	characterI, errors := character.Create(form)
 	if errors == nil {
 		character := characterI.(*model.Character)
 		render.Render(w, r, character.Serialize())

@@ -91,7 +91,7 @@ func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 	userID := ctx.Value("jwt").(*model.Jwt).UserID
-	characterID := repository.GetCurrentCharacter(userID)
+	characterID := repository.GetPlayingCharacter(userID)
 	character := &model.Character{ID: *characterID}
 	db.DB().Where(&character).First(&character)
 
