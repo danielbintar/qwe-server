@@ -27,3 +27,8 @@ func SetLoginCharacter(id uint) {
 	err := config.RedisInstance().HSet(loginCharacterKey(), strconv.FormatUint(uint64(id), 10), "true").Err()
 	if err != nil { panic(err) }
 }
+
+func UnsetLoginCharacter(id uint) {
+	err := config.RedisInstance().HDel(loginCharacterKey(), strconv.FormatUint(uint64(id), 10)).Err()
+	if err != nil { panic(err) }
+}

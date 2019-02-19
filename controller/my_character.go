@@ -62,6 +62,15 @@ func PlayMyCharacter(w http.ResponseWriter, r *http.Request) {
 	characterService.Play(form)
 }
 
+func LogoutMyCharacter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	character := ctx.Value("character").(*model.Character)
+
+	form := characterService.LogoutForm{Character: character}
+
+	characterService.Logout(form)
+}
+
 func CreateMyCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	currentUserID := ctx.Value("jwt").(*model.Jwt).UserID

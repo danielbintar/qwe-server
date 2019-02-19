@@ -9,3 +9,7 @@ var Create = func(form CreateForm) (interface{}, []error) {
 var Play = func(form PlayForm) (interface{}, []error) {
 	return service.Start(&form)
 }
+
+var Logout = func(form LogoutForm) (interface{}, []error) {
+	return service.Start(&form)
+}

@@ -37,6 +37,7 @@ func main() {
 		r.Route("/{characterID}", func(r chi.Router) {
 			r.Use(controller.MyCharacter)
 			r.Post("/play", controller.PlayMyCharacter)
+			r.Post("/logout", controller.LogoutMyCharacter)
 		})
 	})
 
