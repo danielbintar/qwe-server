@@ -1,8 +1,11 @@
 package character
 
 import (
+	"encoding/json"
+
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
+	"github.com/danielbintar/qwe-server/websocket_controller"
 
 	"gopkg.in/validator.v2"
 )
@@ -26,8 +29,11 @@ func (self *PlayForm) Validate() []error {
 }
 
 func (self *PlayForm) Perform() (interface{}, []error) {
-	repository.SetCurrentCharacter(self.Character.UserID, self.Character.ID)
+	position := repository.SetCurrentCharacter(self.Character.UserID, self.Character.ID)
 	repository.SetLoginCharacter(self.Character.ID)
+
+	encodedPosition, _ := json.Marshal(position)
+	websocket_controller.MoveHubInstance().Broadcast <- []byte(encodedPosition)
 
 	return nil, nil
 }

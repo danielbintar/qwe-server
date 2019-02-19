@@ -34,7 +34,7 @@ func (c *Client) readMove() {
 		json.Unmarshal(message, &movement)
 		position := repository.MovingCharacter(1, movement)
 		encodedPosition, _ := json.Marshal(position)
-		c.hub.broadcast <- []byte(string(encodedPosition))
+		c.hub.Broadcast <- []byte(string(encodedPosition))
 	}
 }
 
