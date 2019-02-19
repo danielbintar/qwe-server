@@ -2,6 +2,7 @@ package character
 
 import (
 	"github.com/danielbintar/qwe-server/repository"
+	"github.com/danielbintar/qwe-server/model"
 
 	"gopkg.in/validator.v2"
 )
@@ -30,6 +31,17 @@ func (self *LeaveTownForm) Perform() (interface{}, []error) {
 
 	repository.UnsetCharacterInTown(self.ID)
 	repository.UnsetCharacterTownPosition(self.ID, *townID)
+
+	town := repository.FindTown(*townID)
+	region := repository.FindRegion(town.RegionID)
+	townPosition := region.FindTownPosition(town.ID)
+	position := &model.CharacterPosition {
+		ID: self.ID,
+		X: townPosition.X,
+		Y: townPosition.Y,
+	}
+	repository.SetCharacterInRegion(self.ID, region.ID)
+	repository.SetRegionCharacterPosition(region.ID, position)
 
 	return nil, nil
 }

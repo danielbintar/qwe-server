@@ -15,6 +15,10 @@ func characterTownKey() string {
 	return "character_town"
 }
 
+func characterRegionKey() string {
+	return "character_region"
+}
+
 func GetPlayingCharacter(id uint) *uint {
 	var characterID uint
 	r, err := config.RedisInstance().HGet(currentCharacterKey(), strconv.FormatUint(uint64(id), 10)).Result()
@@ -55,6 +59,11 @@ func GetCharacterInTown(id uint) *uint {
 
 func SetCharacterInTown(characterID uint, townID uint) {
 	err := config.RedisInstance().HSet(characterTownKey(), strconv.FormatUint(uint64(characterID), 10), townID).Err()
+	if err != nil { panic(err) }
+}
+
+func SetCharacterInRegion(characterID uint, regionID uint) {
+	err := config.RedisInstance().HSet(characterRegionKey(), strconv.FormatUint(uint64(characterID), 10), regionID).Err()
 	if err != nil { panic(err) }
 }
 
