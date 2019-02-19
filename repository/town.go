@@ -25,8 +25,11 @@ func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
 			var position *model.CharacterPosition
 			json.Unmarshal([]byte(v), &position)
 			u64, _ := strconv.ParseUint(k, 10, 32)
-			position.ID = uint(u64)
-			positions = append(positions, position)
+
+			if IsCharacterLogin(uint(u64)) {
+				position.ID = uint(u64)
+				positions = append(positions, position)
+			}
 		}
 	}
 	return positions
