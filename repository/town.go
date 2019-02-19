@@ -13,7 +13,7 @@ func townUsersKey(id uint) string {
 	return "towns:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
-func UnsetCharacterTownPosition(characterID uint, townID uint) {
+func UnsetTownCharacterPosition(characterID uint, townID uint) {
 	err := config.RedisInstance().HDel(townUsersKey(townID), strconv.FormatUint(uint64(characterID), 10)).Err()
 	if err != nil { panic(err) }
 }

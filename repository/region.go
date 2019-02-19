@@ -13,6 +13,11 @@ func regionUsersKey(id uint) string {
 	return "regions:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
+func UnsetRegionCharacterPosition(characterID uint, regionID uint) {
+	err := config.RedisInstance().HDel(regionUsersKey(regionID), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
 func SetRegionCharacterPosition(id uint, position *model.CharacterPosition) {
 	coordinate := map[string]uint{
 		"x": position.X,

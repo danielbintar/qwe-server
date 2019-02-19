@@ -72,6 +72,11 @@ func UnsetCharacterInTown(characterID uint) {
 	if err != nil { panic(err) }
 }
 
+func UnsetCharacterInRegion(characterID uint) {
+	err := config.RedisInstance().HDel(characterRegionKey(), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
 func SetCurrentCharacter(userID uint, characterID uint) {
 	err := config.RedisInstance().HSet(currentCharacterKey(), strconv.FormatUint(uint64(userID), 10), characterID).Err()
 	if err != nil { panic(err) }

@@ -30,7 +30,7 @@ func (self *LeaveTownForm) Perform() (interface{}, []error) {
 	if townID == nil { panic("panic") }
 
 	repository.UnsetCharacterInTown(self.ID)
-	repository.UnsetCharacterTownPosition(self.ID, *townID)
+	repository.UnsetTownCharacterPosition(self.ID, *townID)
 
 	town := repository.FindTown(*townID)
 	region := repository.FindRegion(town.RegionID)
