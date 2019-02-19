@@ -10,7 +10,7 @@ func loginCharacterKey() string {
 	return "character_login"
 }
 
-func IsCharacterLogin(id uint) bool {
+func IsLoginCharacter(id uint) bool {
 	_, err := config.RedisInstance().HGet(loginCharacterKey(), strconv.FormatUint(uint64(id), 10)).Result()
 	if err != nil {
 		if err.Error() == "redis: nil" {
@@ -21,4 +21,9 @@ func IsCharacterLogin(id uint) bool {
 	}
 
 	return true
+}
+
+func SetLoginCharacter(id uint) {
+	err := config.RedisInstance().HSet(loginCharacterKey(), strconv.FormatUint(uint64(id), 10), "true").Err()
+	if err != nil { panic(err) }
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/danielbintar/qwe-server/db"
 	"github.com/danielbintar/qwe-server/model"
 	characterService "github.com/danielbintar/qwe-server/service/character"
-	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -56,10 +55,11 @@ func GetMyCharacters(w http.ResponseWriter, r *http.Request) {
 
 func PlayMyCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	currentUserID := ctx.Value("jwt").(*model.Jwt).UserID
-	characterID := ctx.Value("character").(*model.Character).ID
+	character := ctx.Value("character").(*model.Character)
 
-	repository.SetCurrentCharacter(currentUserID, characterID)
+	form := characterService.PlayForm{Character: character}
+
+	characterService.Play(form)
 }
 
 func CreateMyCharacter(w http.ResponseWriter, r *http.Request) {
