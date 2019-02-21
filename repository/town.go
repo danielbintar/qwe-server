@@ -25,8 +25,11 @@ func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
 			var position *model.CharacterPosition
 			json.Unmarshal([]byte(v), &position)
 			u64, _ := strconv.ParseUint(k, 10, 32)
-			position.ID = uint(u64)
-			positions = append(positions, position)
+
+			if IsLoginCharacter(uint(u64)) {
+				position.ID = uint(u64)
+				positions = append(positions, position)
+			}
 		}
 	}
 	return positions
@@ -48,7 +51,7 @@ func getTownCharacterPosition(id uint, characterID uint) *model.CharacterPositio
 	return position
 }
 
-func setDefaultPosition(characterID uint) {
+func setDefaultPosition(characterID uint) *model.CharacterPosition {
 	townID := uint(1)
 	town := FindTown(townID)
 
@@ -61,6 +64,12 @@ func setDefaultPosition(characterID uint) {
 
 	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(characterID), 10), coordinateJson).Err()
 	if err != nil { panic(err) }
+
+	return &model.CharacterPosition {
+		ID: characterID,
+		X: town.Position.X,
+		Y: town.Position.Y,
+	}
 }
 
 func MovingCharacter(townID uint, movement *model.CharacterMovement) *model.CharacterPosition {

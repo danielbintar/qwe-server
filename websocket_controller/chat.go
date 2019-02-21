@@ -40,7 +40,7 @@ func (c *Client) readChat() {
 		json.Unmarshal(message, &chat)
 		chat.Sender = c.character.Name
 		encodedChat, _ := json.Marshal(chat)
-		c.hub.broadcast <- []byte(string(encodedChat))
+		c.hub.Broadcast <- []byte(string(encodedChat))
 	}
 }
 
