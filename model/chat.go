@@ -1,6 +1,6 @@
 package model
 
-type ChatRequest struct {
+type ChatIncoming struct {
 	Message string `json:"message"`
 }
 
@@ -9,7 +9,7 @@ type ChatSender struct {
 	Name string `json:"name"`
 }
 
-type ChatResponse struct {
+type ChatOutgoing struct {
 	Sender  ChatSender `json:"sender"`
 	Message string     `json:"message"`
 }

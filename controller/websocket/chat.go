@@ -7,11 +7,11 @@ import (
 )
 
 func (c Client) manageChat(rawData []byte) {
-	var req model.ChatRequest
+	var req model.ChatIncoming
 	err := json.Unmarshal(rawData, &req)
 	if err != nil { return }
 
-	resp := model.ChatResponse {
+	resp := model.ChatOutgoing {
 		Message: req.Message,
 		Sender: model.ChatSender {
 			ID: c.character.ID,

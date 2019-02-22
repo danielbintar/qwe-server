@@ -9,7 +9,6 @@ import (
 
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/db"
-	"github.com/danielbintar/qwe-server/constant"
 	"github.com/danielbintar/qwe-server/repository"
 
 	"github.com/gorilla/websocket"
@@ -40,13 +39,11 @@ func (c *Client) read() {
 		var r *model.WebsocketRequest
 		err = json.Unmarshal(message, &r)
 		if err != nil { continue }
-		encoded, err := json.Marshal(&r)
-		if err != nil { continue }
 
 		switch r.Action {
-		case constant.WS_ACTION_MOVE:
-			c.hub.Broadcast <- encoded
-		case constant.WS_ACTION_CHAT:
+		case "move":
+			c.manageMove(r.Data)
+		case "chat":
 			c.manageChat(r.Data)
 		}
 	}
