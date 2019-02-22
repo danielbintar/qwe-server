@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	controller "github.com/danielbintar/qwe-server/websocket_controller"
-	webController "github.com/danielbintar/qwe-server/controller"
+	webController "github.com/danielbintar/qwe-server/controller/web"
 
 
 	"github.com/go-chi/chi"
