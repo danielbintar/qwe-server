@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielbintar/qwe-server/app/websocket"
-	"github.com/danielbintar/qwe-server/controller"
+	controller "github.com/danielbintar/qwe-server/controller/web"
 	"github.com/danielbintar/qwe-server/config"
 
 	"github.com/go-chi/chi"

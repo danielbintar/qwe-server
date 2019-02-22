@@ -1,4 +1,4 @@
-package websocket_controller
+package websocket
 
 import "sync"
 
@@ -17,25 +17,15 @@ type Hub struct {
 }
 
 var (
-	chatHub *Hub
-	chatHubMutex sync.Once
-
-	moveHub *Hub
-	moveHubMutex sync.Once
+	hub *Hub
+	hubMutex sync.Once
 )
 
-func ChatHubInstance() *Hub {
-	chatHubMutex.Do(func() {
-		chatHub = newHub()
+func HubInstance() *Hub {
+	hubMutex.Do(func() {
+		hub = newHub()
 	})
-	return chatHub
-}
-
-func MoveHubInstance() *Hub {
-	moveHubMutex.Do(func() {
-		moveHub = newHub()
-	})
-	return moveHub
+	return hub
 }
 
 func newHub() *Hub {

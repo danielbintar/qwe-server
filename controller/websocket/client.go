@@ -1,4 +1,4 @@
-package websocket_controller
+package websocket
 
 import (
 	"time"
@@ -31,7 +31,7 @@ var upgrader = websocket.Upgrader{
 type Client struct {
 	hub *Hub
 
-	character model.Character
+	character *model.Character
 
 	// The websocket connection.
 	conn *websocket.Conn

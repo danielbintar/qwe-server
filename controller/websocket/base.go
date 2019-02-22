@@ -1,4 +1,4 @@
-package websocket_controller
+package websocket
 
 import (
 	"bytes"
@@ -19,7 +19,21 @@ var (
 	space   = []byte{' '}
 )
 
-func (c *Client) readChat() {
+type OutgoingMessage struct {
+	Action string      `json:"action"`
+	Data   interface{} `json:"data"`
+}
+
+func encapsulateTopic(action string, data interface{}) []byte {
+	o := OutgoingMessage {
+		Action: action,
+		Data: data,
+	}
+	b, _ := json.Marshal(&o)
+	return b
+}
+
+func (c *Client) read() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -36,15 +50,20 @@ func (c *Client) readChat() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		var chat *model.Chat
-		json.Unmarshal(message, &chat)
-		chat.Sender = c.character.Name
-		encodedChat, _ := json.Marshal(chat)
-		c.hub.Broadcast <- []byte(string(encodedChat))
+		var r *model.WebsocketRequest
+		err = json.Unmarshal(message, &r)
+		if err != nil { continue }
+
+		switch r.Action {
+		case "move":
+			c.manageMove(r.Data)
+		case "chat":
+			c.manageChat(r.Data)
+		}
 	}
 }
 
-func (c *Client) writeChat() {
+func (c *Client) write() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -66,7 +85,7 @@ func (c *Client) writeChat() {
 			}
 			w.Write(message)
 
-			// Add queued chat messages to the current websocket message.
+			// Add queued messages to the current websocket message.
 			n := len(c.send)
 			for i := 0; i < n; i++ {
 				w.Write(newline)
@@ -85,7 +104,7 @@ func (c *Client) writeChat() {
 	}
 }
 
-func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func Manage(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil { panic(err) }
 
@@ -95,11 +114,11 @@ func ManageChat(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	character := &model.Character{ID: *characterID}
 	db.DB().Where(&character).First(&character)
 
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), character: *character}
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), character: character}
 	client.hub.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	go client.writeChat()
-	go client.readChat()
+	go client.write()
+	go client.read()
 }
