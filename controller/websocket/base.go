@@ -47,7 +47,7 @@ func (c *Client) read() {
 		case constant.WS_ACTION_MOVE:
 			c.hub.Broadcast <- encoded
 		case constant.WS_ACTION_CHAT:
-			c.hub.Broadcast <- encoded
+			c.manageChat(r.Data)
 		}
 	}
 }
