@@ -3,7 +3,7 @@ package websocket
 import (
 	"net/http"
 
-	controller "github.com/danielbintar/qwe-server/websocket_controller"
+	controller "github.com/danielbintar/qwe-server/controller/websocket"
 	webController "github.com/danielbintar/qwe-server/controller/web"
 
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
-	"github.com/danielbintar/qwe-server/websocket_controller"
+	controller "github.com/danielbintar/qwe-server/controller/websocket"
 
 	"gopkg.in/validator.v2"
 )
@@ -33,7 +33,7 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 	repository.SetLoginCharacter(self.Character.ID)
 
 	encodedPosition, _ := json.Marshal(position)
-	websocket_controller.MoveHubInstance().Broadcast <- []byte(encodedPosition)
+	controller.MoveHubInstance().Broadcast <- []byte(encodedPosition)
 
 	return nil, nil
 }

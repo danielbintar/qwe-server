@@ -1,4 +1,4 @@
-package websocket_controller
+package websocket
 
 import "sync"
 
