@@ -19,6 +19,20 @@ var (
 	space   = []byte{' '}
 )
 
+type OutgoingMessage struct {
+	Action string      `json:"action"`
+	Data   interface{} `json:"data"`
+}
+
+func encapsulateTopic(action string, data interface{}) []byte {
+	o := OutgoingMessage {
+		Action: action,
+		Data: data,
+	}
+	b, _ := json.Marshal(&o)
+	return b
+}
+
 func (c *Client) read() {
 	defer func() {
 		c.hub.unregister <- c

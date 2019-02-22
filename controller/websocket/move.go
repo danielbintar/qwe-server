@@ -50,8 +50,6 @@ func (c Client) manageMove(rawData []byte) {
 		},
 	}
 
-	encoded, err := json.Marshal(&resp)
-	if err != nil { return }
-
-	c.hub.Broadcast <- encoded
+	data := encapsulateTopic("move", resp)
+	c.hub.Broadcast <- data
 }

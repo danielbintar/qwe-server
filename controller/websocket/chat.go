@@ -19,8 +19,6 @@ func (c Client) manageChat(rawData []byte) {
 		},
 	}
 
-	encoded, err := json.Marshal(&resp)
-	if err != nil { return }
-
-	c.hub.Broadcast <- encoded
+	data := encapsulateTopic("chat", resp)
+	c.hub.Broadcast <- data
 }
