@@ -40,7 +40,7 @@ func (c Client) manageMove(rawData []byte) {
 		position.Y++
 	}
 
-	repository.SetTownCharacterPosition(*townID, position)
+	repository.SetTownCharacterPosition(*townID, *position)
 
 	resp := model.MoveOutgoing {
 		X: position.X,

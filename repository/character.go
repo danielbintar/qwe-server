@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/danielbintar/qwe-server/config"
-	"github.com/danielbintar/qwe-server/model"
 )
 
 func currentCharacterKey() string {
@@ -32,16 +31,9 @@ func GetCurrentCharacter(id uint) *uint {
 	return &characterID
 }
 
-func SetCurrentCharacter(userID uint, characterID uint) *model.CharacterPosition {
+func SetCurrentCharacter(userID uint, characterID uint) {
 	err := config.RedisInstance().HSet(currentCharacterKey(), strconv.FormatUint(uint64(userID), 10), characterID).Err()
 	if err != nil { panic(err) }
-
-	position := GetTownCharacterPosition(uint(1), characterID)
-	if position == nil {
-		position = setDefaultPosition(characterID)
-	}
-
-	return position
 }
 
 func GetCharacterTownID(id uint) *uint {
@@ -59,4 +51,9 @@ func GetCharacterTownID(id uint) *uint {
 	}
 
 	return &townID
+}
+
+func SetCharacterTownID(characterID uint, townID uint) {
+	err := config.RedisInstance().HSet(characterTownIDKey(), strconv.FormatUint(uint64(characterID), 10), townID).Err()
+	if err != nil { panic(err) }
 }

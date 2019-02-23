@@ -51,7 +51,7 @@ func GetTownCharacterPosition(id uint, characterID uint) *model.CharacterPositio
 	return position
 }
 
-func SetTownCharacterPosition(townID uint, pos *model.CharacterPosition) {
+func SetTownCharacterPosition(townID uint, pos model.CharacterPosition) {
 	coordinate := map[string]uint{
 		"x": pos.X,
 		"y": pos.Y,
@@ -62,28 +62,6 @@ func SetTownCharacterPosition(townID uint, pos *model.CharacterPosition) {
 	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(pos.ID), 10), coordinateJson).Err()
 	if err != nil { panic(err) }
 }
-
-func setDefaultPosition(characterID uint) *model.CharacterPosition {
-	townID := uint(1)
-	town := FindTown(townID)
-
-	coordinate := map[string]uint{
-		"x": town.Position.X,
-		"y": town.Position.Y,
-	}
-
-	coordinateJson, _ := json.Marshal(coordinate)
-
-	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(characterID), 10), coordinateJson).Err()
-	if err != nil { panic(err) }
-
-	return &model.CharacterPosition {
-		ID: characterID,
-		X: town.Position.X,
-		Y: town.Position.Y,
-	}
-}
-
 
 func FindTown(id uint) *model.Town {
 	for _, town := range town_config.Instance().Towns {
