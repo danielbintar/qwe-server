@@ -51,7 +51,7 @@ func GetTownCharacterPosition(id uint, characterID uint) *model.CharacterPositio
 	return position
 }
 
-func SetTownCharacterPosition(townID uint, pos *model.CharacterPosition) {
+func SetTownCharacterPosition(townID uint, pos model.CharacterPosition) {
 	coordinate := map[string]uint{
 		"x": pos.X,
 		"y": pos.Y,
