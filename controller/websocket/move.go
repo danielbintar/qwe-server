@@ -3,6 +3,7 @@ package websocket
 import (
 	"encoding/json"
 
+	"github.com/danielbintar/qwe-server/constant"
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
 )
@@ -24,6 +25,7 @@ func (c Client) manageMove(rawData []byte) {
 	switch req.Direction {
 	case "left":
 		if position.X == 0 {
+			c.send <- []byte(constant.PING)
 			return
 		} else {
 			position.X--
@@ -32,6 +34,7 @@ func (c Client) manageMove(rawData []byte) {
 		position.X++
 	case "down":
 		if position.Y == 0 {
+			c.send <- []byte(constant.PING)
 			return
 		} else {
 			position.Y--
