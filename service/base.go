@@ -5,6 +5,10 @@ type Service interface {
 	Perform() (interface{}, []error)
 }
 
+type Websocket interface {
+	SendBroadcast([]byte)
+}
+
 func Start(svc Service) (interface{}, []error) {
 	var object interface{}
 

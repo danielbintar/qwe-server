@@ -37,6 +37,10 @@ func newHub() *Hub {
 	}
 }
 
+func (h *Hub) SendBroadcast(data []byte) {
+	h.Broadcast <- data
+}
+
 func (h *Hub) Run() {
 	for {
 		select {

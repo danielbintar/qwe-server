@@ -36,3 +36,7 @@ type CharacterPosition struct {
 	X  uint `json:"x"`
 	Y  uint `json:"y"`
 }
+
+type CharacterLogout struct {
+	ID uint `json:"id"`
+}

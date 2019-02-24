@@ -5,13 +5,14 @@ import (
 
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
-	controller "github.com/danielbintar/qwe-server/controller/websocket"
+	"github.com/danielbintar/qwe-server/service"
 
 	"gopkg.in/validator.v2"
 )
 
 type PlayForm struct {
 	Character *model.Character `validate:"nonzero"`
+	Websocket service.Websocket
 }
 
 func (self *PlayForm) Validate() []error {
@@ -61,13 +62,13 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 	}
 
 	data := encapsulateTopic("move", resp)
-	controller.HubInstance().Broadcast <- data
+	self.Websocket.SendBroadcast(data)
 
 	return nil, nil
 }
 
 func encapsulateTopic(action string, data interface{}) []byte {
-	o := controller.OutgoingMessage {
+	o := model.OutgoingMessage {
 		Action: action,
 		Data: data,
 	}
