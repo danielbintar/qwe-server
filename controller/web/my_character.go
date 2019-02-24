@@ -8,6 +8,7 @@ import (
 
 	"github.com/danielbintar/qwe-server/db"
 	"github.com/danielbintar/qwe-server/model"
+	wsController "github.com/danielbintar/qwe-server/controller/websocket"
 	characterService "github.com/danielbintar/qwe-server/service/character"
 
 	"github.com/go-chi/chi"
@@ -57,7 +58,10 @@ func PlayMyCharacter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	character := ctx.Value("character").(*model.Character)
 
-	form := characterService.PlayForm{Character: character}
+	form := characterService.PlayForm{
+		Character: character,
+		Websocket: wsController.HubInstance(),
+	}
 
 	characterService.Play(form)
 }

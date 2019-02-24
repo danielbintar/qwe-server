@@ -10,6 +10,7 @@ import (
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/db"
 	"github.com/danielbintar/qwe-server/repository"
+	characterService "github.com/danielbintar/qwe-server/service/character"
 
 	"github.com/gorilla/websocket"
 )
@@ -19,13 +20,8 @@ var (
 	space   = []byte{' '}
 )
 
-type OutgoingMessage struct {
-	Action string      `json:"action"`
-	Data   interface{} `json:"data"`
-}
-
 func encapsulateTopic(action string, data interface{}) []byte {
-	o := OutgoingMessage {
+	o := model.OutgoingMessage {
 		Action: action,
 		Data: data,
 	}
@@ -37,6 +33,12 @@ func (c *Client) read() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
+
+		form := characterService.LogoutForm{
+			Character: c.character,
+			Websocket: c.hub,
+		}
+		characterService.Logout(form)
 	}()
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
