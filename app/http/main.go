@@ -49,6 +49,14 @@ func main() {
 		})
 	})
 
+	r.Route("/regions", func(r chi.Router) {
+		r.Route("/{regionID}", func(r chi.Router) {
+			r.Use(controller.Authenticated)
+			r.Use(controller.Region)
+			r.Get("/", controller.FindRegion)
+		})
+	})
+
 	websocket.Main(r)
 
 	fmt.Println("listen to 3333")

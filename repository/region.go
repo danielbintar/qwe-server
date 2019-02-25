@@ -5,17 +5,17 @@ import (
 	"strconv"
 
 	"github.com/danielbintar/qwe-server/config"
-	town_config "github.com/danielbintar/qwe-server/config/town"
+	region_config "github.com/danielbintar/qwe-server/config/region"
 	"github.com/danielbintar/qwe-server/model"
 )
 
-func townUsersKey(id uint) string {
-	return "towns:" + strconv.FormatUint(uint64(id), 10) + ":users"
+func regionUsersKey(id uint) string {
+	return "regions:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
-func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
+func GetRegionCharactersPosition(id uint) []*model.CharacterPosition {
 	var positions []*model.CharacterPosition
-	r, err := config.RedisInstance().HGetAll(townUsersKey(id)).Result()
+	r, err := config.RedisInstance().HGetAll(regionUsersKey(id)).Result()
 	if err != nil {
 		if err.Error() != "redis: nil" {
 			panic(err)
@@ -35,9 +35,9 @@ func GetTownCharactersPosition(id uint) []*model.CharacterPosition {
 	return positions
 }
 
-func GetTownCharacterPosition(id uint, characterID uint) *model.CharacterPosition {
+func GetRegionCharacterPosition(id uint, characterID uint) *model.CharacterPosition {
 	var position *model.CharacterPosition
-	r, err := config.RedisInstance().HGet(townUsersKey(id), strconv.FormatUint(uint64(characterID), 10)).Result()
+	r, err := config.RedisInstance().HGet(regionUsersKey(id), strconv.FormatUint(uint64(characterID), 10)).Result()
 	if err != nil {
 		if err.Error() == "redis: nil" {
 			return nil
@@ -51,7 +51,7 @@ func GetTownCharacterPosition(id uint, characterID uint) *model.CharacterPositio
 	return position
 }
 
-func SetTownCharacterPosition(townID uint, pos model.CharacterPosition) {
+func SetRegionCharacterPosition(regionID uint, pos model.CharacterPosition) {
 	coordinate := map[string]uint{
 		"x": pos.X,
 		"y": pos.Y,
@@ -59,14 +59,14 @@ func SetTownCharacterPosition(townID uint, pos model.CharacterPosition) {
 
 	coordinateJson, _ := json.Marshal(coordinate)
 
-	err := config.RedisInstance().HSet(townUsersKey(townID), strconv.FormatUint(uint64(pos.ID), 10), coordinateJson).Err()
+	err := config.RedisInstance().HSet(regionUsersKey(regionID), strconv.FormatUint(uint64(pos.ID), 10), coordinateJson).Err()
 	if err != nil { panic(err) }
 }
 
-func FindTown(id uint) *model.Town {
-	for _, town := range town_config.Instance().Towns {
-		if town.ID == id {
-			return town
+func FindRegion(id uint) *model.Region {
+	for _, region := range region_config.Instance().Regions {
+		if region.ID == id {
+			return region
 		}
 	}
 
