@@ -43,6 +43,18 @@ func (c Client) manageMove(rawData []byte) {
 		position.Y++
 	}
 
+	town := repository.FindTown(*townID)
+	for _, portal := range town.Portals {
+		if portal.In(*position) {
+			resp := model.LeaveTownData {ID: c.character.ID}
+			data := encapsulateTopic("leave_town", resp)
+			c.hub.Broadcast <- data
+
+			return
+		}
+	}
+
+
 	repository.SetTownCharacterPosition(*townID, *position)
 
 	resp := model.MoveOutgoing {
