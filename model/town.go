@@ -20,11 +20,12 @@ func (self rangePosition) In(p CharacterPosition) bool {
 }
 
 type Town struct {
-	ID                 uint                 `yaml:"id"       json:"id"`
-	Name               string               `yaml:"name"     json:"name"`
-	Position           position             `yaml:"position" json:"position"`
-	Portals            []*rangePosition     `yaml:"portals"  json:"portals"`
-	CharactersPosition []*CharacterPosition `                json:"characters"`
+	ID                 uint                 `yaml:"id"        json:"id"`
+	Name               string               `yaml:"name"      json:"name"`
+	Position           position             `yaml:"position"  json:"position"`
+	RegionID           uint                 `yaml:"region_id" json:"region_id"`
+	Portals            []*rangePosition     `yaml:"portals"   json:"portals"`
+	CharactersPosition []*CharacterPosition `                 json:"characters"`
 }
 
 func (f *Town) Render(w http.ResponseWriter, r *http.Request) error {

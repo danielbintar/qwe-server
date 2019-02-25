@@ -6,6 +6,7 @@ import (
 	"github.com/danielbintar/qwe-server/constant"
 	"github.com/danielbintar/qwe-server/model"
 	"github.com/danielbintar/qwe-server/repository"
+	characterService "github.com/danielbintar/qwe-server/service/character"
 )
 
 func (c Client) manageMove(rawData []byte) {
@@ -46,9 +47,11 @@ func (c Client) manageMove(rawData []byte) {
 	town := repository.FindTown(*townID)
 	for _, portal := range town.Portals {
 		if portal.In(*position) {
-			resp := model.LeaveTownData {ID: c.character.ID}
-			data := encapsulateTopic("leave_town", resp)
-			c.hub.Broadcast <- data
+			form := characterService.LeaveTownForm {
+				Character: *c.character,
+				Websocket: c.hub,
+			}
+			characterService.LeaveTown(form)
 
 			return
 		}

@@ -2,6 +2,7 @@ towns:
   -
     id: 1
     name: cimahi
+    region_id: 1
     position:
       x: 5
       y: 5

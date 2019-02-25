@@ -22,3 +22,12 @@ func (f *Region) Render(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
+
+func (self Region) FindTown(id uint) *regionTown {
+	for _, town := range self.Towns {
+		if town.ID == id {
+			return town
+		}
+	}
+	return nil
+}

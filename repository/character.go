@@ -15,6 +15,10 @@ func characterTownIDKey() string {
 	return "character_town_id"
 }
 
+func characterRegionIDKey() string {
+	return "character_region_id"
+}
+
 func GetCurrentCharacter(id uint) *uint {
 	var characterID uint
 	r, err := config.RedisInstance().HGet(currentCharacterKey(), strconv.FormatUint(uint64(id), 10)).Result()
@@ -55,5 +59,20 @@ func GetCharacterTownID(id uint) *uint {
 
 func SetCharacterTownID(characterID uint, townID uint) {
 	err := config.RedisInstance().HSet(characterTownIDKey(), strconv.FormatUint(uint64(characterID), 10), townID).Err()
+	if err != nil { panic(err) }
+}
+
+func UnsetCharacterTownID(characterID uint) {
+	err := config.RedisInstance().HDel(characterTownIDKey(), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
+func SetCharacterRegionID(characterID uint, regionID uint) {
+	err := config.RedisInstance().HSet(characterRegionIDKey(), strconv.FormatUint(uint64(characterID), 10), regionID).Err()
+	if err != nil { panic(err) }
+}
+
+func UnsetCharacterRegionID(characterID uint) {
+	err := config.RedisInstance().HDel(characterRegionIDKey(), strconv.FormatUint(uint64(characterID), 10)).Err()
 	if err != nil { panic(err) }
 }
