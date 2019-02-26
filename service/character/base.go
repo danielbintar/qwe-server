@@ -13,3 +13,13 @@ var Play = func(form PlayForm) (interface{}, []error) {
 var Logout = func(form LogoutForm) (interface{}, []error) {
 	return service.Start(&form)
 }
+
+// leave to region
+var LeaveTown = func(form LeaveTownForm) (interface{}, []error) {
+	return service.Start(&form)
+}
+
+// enter from region
+var EnterTown = func(form EnterTownForm) (interface{}, []error) {
+	return service.Start(&form)
+}

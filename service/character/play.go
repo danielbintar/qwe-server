@@ -30,6 +30,12 @@ func (self *PlayForm) Validate() []error {
 }
 
 func (self *PlayForm) Perform() (interface{}, []error) {
+	place := repository.GetCharacterActivePlace(self.Character.ID)
+	if place == nil {
+		repository.SetCharacterActivePlace(self.Character.ID, "town")
+	}
+	self.Character.ActivePlace = place
+
 	townID := repository.GetCharacterTownID(self.Character.ID)
 	if townID == nil {
 		defaultTownID := uint(1)
@@ -64,7 +70,7 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 	data := encapsulateTopic("move", resp)
 	self.Websocket.SendBroadcast(data)
 
-	return nil, nil
+	return self.Character, nil
 }
 
 func encapsulateTopic(action string, data interface{}) []byte {

@@ -1,0 +1,15 @@
+regions:
+  -
+    id: 1
+    name: southeast asia
+    towns:
+      -
+        id: 1
+        spawn_position:
+          x: 5
+          y: 5
+        portal:
+          min_x: 15
+          max_x: 18
+          min_y: 15
+          max_y: 18

@@ -63,6 +63,11 @@ func SetTownCharacterPosition(townID uint, pos model.CharacterPosition) {
 	if err != nil { panic(err) }
 }
 
+func UnsetTownCharacterPosition(townID uint, characterID uint) {
+	err := config.RedisInstance().HDel(townUsersKey(townID), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
 func FindTown(id uint) *model.Town {
 	for _, town := range town_config.Instance().Towns {
 		if town.ID == id {
@@ -70,5 +75,5 @@ func FindTown(id uint) *model.Town {
 		}
 	}
 
-	return &model.Town{}
+	return nil
 }

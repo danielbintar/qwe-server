@@ -11,3 +11,11 @@ type OutgoingMessage struct {
 	Action string      `json:"action"`
 	Data   interface{} `json:"data"`
 }
+
+type LeaveTownData struct {
+	ID uint `json:"id"`
+}
+
+type LeaveRegionData struct {
+	ID uint `json:"id"`
+}

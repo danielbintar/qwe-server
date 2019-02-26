@@ -2,6 +2,18 @@ towns:
   -
     id: 1
     name: cimahi
-    position:
+    region_id: 1
+    position: #spawn position
       x: 5
       y: 5
+    portals:
+      -
+        min_x: 0
+        max_x: 6
+        min_y: 11
+        max_y: 14
+      -
+        min_x: 43
+        max_x: 50
+        min_y: 11
+        max_y: 14
