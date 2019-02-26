@@ -63,7 +63,8 @@ func PlayMyCharacter(w http.ResponseWriter, r *http.Request) {
 		Websocket: wsController.HubInstance(),
 	}
 
-	characterService.Play(form)
+	characterI, _ := characterService.Play(form)
+	render.Render(w, r, characterI.(*model.Character).Serialize())
 }
 
 func LogoutMyCharacter(w http.ResponseWriter, r *http.Request) {

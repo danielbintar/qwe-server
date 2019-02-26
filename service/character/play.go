@@ -34,6 +34,7 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 	if place == nil {
 		repository.SetCharacterActivePlace(self.Character.ID, "town")
 	}
+	self.Character.ActivePlace = place
 
 	townID := repository.GetCharacterTownID(self.Character.ID)
 	if townID == nil {
@@ -69,7 +70,7 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 	data := encapsulateTopic("move", resp)
 	self.Websocket.SendBroadcast(data)
 
-	return nil, nil
+	return self.Character, nil
 }
 
 func encapsulateTopic(action string, data interface{}) []byte {

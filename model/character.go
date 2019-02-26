@@ -13,11 +13,15 @@ type Character struct {
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+
+	// not persisted
+	ActivePlace *string `json:"active_place" gorm:"-"`
 }
 
 type CharacterSerializer struct {
-	ID        uint      `json:"id"`
-	Name      string    `json:"name"`
+	ID          uint    `json:"id"`
+	Name        string  `json:"name"`
+	ActivePlace *string `json:"active_place"`
 }
 
 func (f *CharacterSerializer) Render(w http.ResponseWriter, r *http.Request) error {
@@ -28,6 +32,7 @@ func (self *Character) Serialize() render.Renderer {
 	return &CharacterSerializer{
 		ID: self.ID,
 		Name: self.Name,
+		ActivePlace: self.ActivePlace,
 	}
 }
 
