@@ -113,6 +113,20 @@ func (c Client) manageMoveRegion(req model.MoveIncoming) {
 		position.Y++
 	}
 
+	region := repository.FindRegion(*regionID)
+	for _, town := range region.Towns {
+		if town.Portal.In(*position) {
+			form := characterService.EnterTownForm {
+				Character: *c.character,
+				TownID: town.ID,
+				Websocket: c.hub,
+			}
+			characterService.EnterTown(form)
+
+			return
+		}
+	}
+
 	repository.SetRegionCharacterPosition(*regionID, *position)
 
 	resp := model.MoveOutgoing {

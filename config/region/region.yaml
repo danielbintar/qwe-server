@@ -9,7 +9,7 @@ regions:
           x: 5
           y: 5
         portal:
-          min_x: 0
-          max_x: 6
-          min_y: 11
-          max_y: 14
+          min_x: 15
+          max_x: 18
+          min_y: 15
+          max_y: 18

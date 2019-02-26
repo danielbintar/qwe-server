@@ -15,3 +15,7 @@ type OutgoingMessage struct {
 type LeaveTownData struct {
 	ID uint `json:"id"`
 }
+
+type LeaveRegionData struct {
+	ID uint `json:"id"`
+}

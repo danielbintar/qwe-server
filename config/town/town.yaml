@@ -3,7 +3,7 @@ towns:
     id: 1
     name: cimahi
     region_id: 1
-    position:
+    position: #spawn position
       x: 5
       y: 5
     portals:

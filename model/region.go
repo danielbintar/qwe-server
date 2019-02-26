@@ -5,7 +5,7 @@ import "net/http"
 type regionTown struct {
 	ID            uint          `yaml:"id"             json:"id"`
 	SpawnPosition position      `yaml:"spawn_position" json:"spawn_position"`
-	Portals       rangePosition `yaml:"portal"         json:"portal"`
+	Portal        rangePosition `yaml:"portal"         json:"portal"`
 }
 
 type Region struct {

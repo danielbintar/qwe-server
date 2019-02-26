@@ -63,6 +63,11 @@ func SetRegionCharacterPosition(regionID uint, pos model.CharacterPosition) {
 	if err != nil { panic(err) }
 }
 
+func UnsetRegionCharacterPosition(regionID uint, characterID uint) {
+	err := config.RedisInstance().HDel(regionUsersKey(regionID), strconv.FormatUint(uint64(characterID), 10)).Err()
+	if err != nil { panic(err) }
+}
+
 func FindRegion(id uint) *model.Region {
 	for _, region := range region_config.Instance().Regions {
 		if region.ID == id {
