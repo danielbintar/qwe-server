@@ -30,6 +30,11 @@ func (self *PlayForm) Validate() []error {
 }
 
 func (self *PlayForm) Perform() (interface{}, []error) {
+	place := repository.GetCharacterActivePlace(self.Character.ID)
+	if place == nil {
+		repository.SetCharacterActivePlace(self.Character.ID, "town")
+	}
+
 	townID := repository.GetCharacterTownID(self.Character.ID)
 	if townID == nil {
 		defaultTownID := uint(1)

@@ -18,6 +18,20 @@ func (c Client) manageMove(rawData []byte) {
 		return
 	}
 
+	place := repository.GetCharacterActivePlace(c.character.ID)
+	switch *place {
+	case "region":
+		c.manageMoveRegion(req)
+	case "town":
+		c.manageMoveTown(req)
+	default:
+		c.send <- []byte(constant.PING)
+	}
+
+
+}
+
+func (c Client) manageMoveTown(req model.MoveIncoming) {
 	townID := repository.GetCharacterTownID(c.character.ID)
 	if townID == nil { return }
 
@@ -59,6 +73,47 @@ func (c Client) manageMove(rawData []byte) {
 
 
 	repository.SetTownCharacterPosition(*townID, *position)
+
+	resp := model.MoveOutgoing {
+		X: position.X,
+		Y: position.Y,
+		Character: model.MoveCharacter {
+			ID: c.character.ID,
+		},
+	}
+
+	data := encapsulateTopic("move", resp)
+	c.hub.Broadcast <- data
+}
+
+func (c Client) manageMoveRegion(req model.MoveIncoming) {
+	regionID := repository.GetCharacterRegionID(c.character.ID)
+	if regionID == nil { return }
+
+	position := repository.GetRegionCharacterPosition(*regionID, c.character.ID)
+
+	switch req.Direction {
+	case "left":
+		if position.X == 0 {
+			c.send <- []byte(constant.PING)
+			return
+		} else {
+			position.X--
+		}
+	case "right":
+		position.X++
+	case "down":
+		if position.Y == 0 {
+			c.send <- []byte(constant.PING)
+			return
+		} else {
+			position.Y--
+		}
+	case "up":
+		position.Y++
+	}
+
+	repository.SetRegionCharacterPosition(*regionID, *position)
 
 	resp := model.MoveOutgoing {
 		X: position.X,

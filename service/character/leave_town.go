@@ -39,6 +39,7 @@ func (self *LeaveTownForm) Perform() (interface{}, []error) {
 	town := repository.FindTown(*townID)
 	region := repository.FindRegion(town.RegionID)
 	repository.SetCharacterRegionID(self.Character.ID, region.ID)
+	repository.SetCharacterActivePlace(self.Character.ID, "region")
 
 	regionTown := region.FindTown(*townID)
 	position := model.CharacterPosition {
