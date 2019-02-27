@@ -9,7 +9,8 @@ type MoveCharacter struct {
 }
 
 type MoveOutgoing struct {
-	Character MoveCharacter `json:"character"`
-	X         uint          `json:"x"`
-	Y         uint          `json:"y"`
+	Character   MoveCharacter `json:"character"`
+	X           uint          `json:"x"`
+	Y           uint          `json:"y"`
+	ActivePlace string        `json:"active_place"`
 }
