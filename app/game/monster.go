@@ -12,6 +12,10 @@ func spawnMonster(id uint, monsterID uint, regionID uint, p model.RangePosition)
 		ID: id,
 		MonsterID: monsterID,
 		RegionID: regionID,
+		Position: model.Position {
+			X: p.MinX,
+			Y: p.MinY,
+		},
 	}
 
 	repository.SpawnMonster(spawn)
@@ -24,6 +28,7 @@ func manageMonster(id uint) {
 		time.Sleep(10000 * time.Millisecond)
 
 		monster := repository.FindSpawnMonster(id)
-		fmt.Println(monster.ID)
+		fmt.Println(monster.Position.X)
+		fmt.Println(monster.Position.Y)
 	}
 }

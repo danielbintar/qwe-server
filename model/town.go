@@ -2,7 +2,7 @@ package model
 
 import "net/http"
 
-type position struct {
+type Position struct {
 	X uint `yaml:"x" json:"x"`
 	Y uint `yaml:"y" json:"y"`
 }
@@ -22,7 +22,7 @@ func (self RangePosition) In(p CharacterPosition) bool {
 type Town struct {
 	ID                 uint                 `yaml:"id"        json:"id"`
 	Name               string               `yaml:"name"      json:"name"`
-	Position           position             `yaml:"position"  json:"position"`
+	Position           Position             `yaml:"position"  json:"position"`
 	RegionID           uint                 `yaml:"region_id" json:"region_id"`
 	Portals            []*RangePosition     `yaml:"portals"   json:"portals"`
 	CharactersPosition []*CharacterPosition `                 json:"characters"`

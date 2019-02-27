@@ -9,5 +9,5 @@ type MonsterSpawn struct {
 	ID        uint     `json:"id"`
 	MonsterID uint     `json:"monster_id"`
 	RegionID  uint     `json:"region_id"`
-	Position  position `json:"position"`
+	Position  Position `json:"position"`
 }
