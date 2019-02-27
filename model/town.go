@@ -7,14 +7,14 @@ type position struct {
 	Y uint `yaml:"y" json:"y"`
 }
 
-type rangePosition struct {
+type RangePosition struct {
 	MinX uint `yaml:"min_x" json:"min_x"`
 	MaxX uint `yaml:"max_x" json:"max_x"`
 	MinY uint `yaml:"min_y" json:"min_y"`
 	MaxY uint `yaml:"max_y" json:"max_y"`
 }
 
-func (self rangePosition) In(p CharacterPosition) bool {
+func (self RangePosition) In(p CharacterPosition) bool {
 	return p.X >= self.MinX && p.X <= self.MaxX &&
 		p.Y >= self.MinY && p.Y <= self.MaxY
 }
@@ -24,7 +24,7 @@ type Town struct {
 	Name               string               `yaml:"name"      json:"name"`
 	Position           position             `yaml:"position"  json:"position"`
 	RegionID           uint                 `yaml:"region_id" json:"region_id"`
-	Portals            []*rangePosition     `yaml:"portals"   json:"portals"`
+	Portals            []*RangePosition     `yaml:"portals"   json:"portals"`
 	CharactersPosition []*CharacterPosition `                 json:"characters"`
 }
 

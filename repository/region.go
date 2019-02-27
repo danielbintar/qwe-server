@@ -77,3 +77,7 @@ func FindRegion(id uint) *model.Region {
 
 	return nil
 }
+
+func AllRegion() []*model.Region {
+	return region_config.Instance().Regions
+}

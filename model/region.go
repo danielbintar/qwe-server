@@ -5,13 +5,20 @@ import "net/http"
 type regionTown struct {
 	ID            uint          `yaml:"id"             json:"id"`
 	SpawnPosition position      `yaml:"spawn_position" json:"spawn_position"`
-	Portal        rangePosition `yaml:"portal"         json:"portal"`
+	Portal        RangePosition `yaml:"portal"         json:"portal"`
+}
+
+type regionMonster struct {
+	ID       uint          `yaml:"id"       json:"id"`
+	Total    uint          `yaml:"total"    json:"total"`
+	Position RangePosition `yaml:"position" json:"position"`
 }
 
 type Region struct {
 	ID                 uint                 `yaml:"id"    json:"id"`
 	Name               string               `yaml:"name"  json:"name"`
 	Towns              []*regionTown        `yaml:"towns" json:"towns"`
+	Monsters           []*regionMonster     `yaml:"monsters"`
 	CharactersPosition []*CharacterPosition `             json:"characters"`
 }
 
