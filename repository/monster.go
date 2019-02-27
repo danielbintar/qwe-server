@@ -9,20 +9,20 @@ import (
 	"github.com/danielbintar/qwe-server/model"
 )
 
-func spawnMonsterKey() string {
-	return "spawn_monster"
+func spawnMonsterKey(regionID uint) string {
+	return "spawn_monster:" + strconv.FormatUint(uint64(regionID), 10)
 }
 
 func SpawnMonster(monster model.MonsterSpawn) {
 	monsterJson, _ := json.Marshal(monster)
-	err := config.RedisInstance().HSet(spawnMonsterKey(), strconv.FormatUint(uint64(monster.ID), 10), monsterJson).Err()
+	err := config.RedisInstance().HSet(spawnMonsterKey(monster.RegionID), strconv.FormatUint(uint64(monster.ID), 10), monsterJson).Err()
 	if err != nil { panic(err) }
 }
 
-func FindSpawnMonster(id uint) *model.MonsterSpawn {
-	var monster model.MonsterSpawn
+func AllSpawnMonster(regionID uint) []*model.MonsterSpawn {
+	monsters := []*model.MonsterSpawn{}
 
-	r, err := config.RedisInstance().HGet(spawnMonsterKey(), strconv.FormatUint(uint64(id), 10)).Result()
+	r, err := config.RedisInstance().HGetAll(spawnMonsterKey(regionID)).Result()
 	if err != nil {
 		if err.Error() == "redis: nil" {
 			return nil
@@ -30,10 +30,14 @@ func FindSpawnMonster(id uint) *model.MonsterSpawn {
 			panic(err)
 		}
 	} else {
-		json.Unmarshal([]byte(r), &monster)
+		for _, v := range r {
+			var monster *model.MonsterSpawn
+			json.Unmarshal([]byte(v), &monster)
+			monsters = append(monsters, monster)
+		}
 	}
 
-	return &monster
+	return monsters
 }
 
 func FindMonster(id uint) *model.Monster {

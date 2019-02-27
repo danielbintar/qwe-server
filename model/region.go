@@ -22,9 +22,30 @@ type Region struct {
 	CharactersPosition []*CharacterPosition `             json:"characters"`
 }
 
-func (f *Region) Render(w http.ResponseWriter, r *http.Request) error {
+func (self Region) Serialize() *RegionSerializer {
+	return &RegionSerializer {
+		ID: self.ID,
+		Name: self.Name,
+		Towns: self.Towns,
+		CharactersPosition: self.CharactersPosition,
+	}
+}
+
+type RegionSerializer struct {
+	ID                 uint                 `json:"id"`
+	Name               string               `json:"name"`
+	Towns              []*regionTown        `json:"towns"`
+	Monsters           []*MonsterSpawn      `json:"monsters"`
+	CharactersPosition []*CharacterPosition `json:"characters"`
+}
+
+func (f *RegionSerializer) Render(w http.ResponseWriter, r *http.Request) error {
 	if f.CharactersPosition == nil {
 		f.CharactersPosition = []*CharacterPosition{}
+	}
+
+	if f.Monsters == nil {
+		f.Monsters = []*MonsterSpawn{}
 	}
 
 	return nil
