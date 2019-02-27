@@ -77,6 +77,7 @@ func (c Client) manageMoveTown(req model.MoveIncoming) {
 	resp := model.MoveOutgoing {
 		X: position.X,
 		Y: position.Y,
+		ActivePlace: "town",
 		Character: model.MoveCharacter {
 			ID: c.character.ID,
 		},
@@ -132,6 +133,7 @@ func (c Client) manageMoveRegion(req model.MoveIncoming) {
 	resp := model.MoveOutgoing {
 		X: position.X,
 		Y: position.Y,
+		ActivePlace: "region",
 		Character: model.MoveCharacter {
 			ID: c.character.ID,
 		},

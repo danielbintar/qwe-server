@@ -32,10 +32,26 @@ func (self *PlayForm) Validate() []error {
 func (self *PlayForm) Perform() (interface{}, []error) {
 	place := repository.GetCharacterActivePlace(self.Character.ID)
 	if place == nil {
-		repository.SetCharacterActivePlace(self.Character.ID, "town")
+		defaultPlace := "town"
+		place = &defaultPlace
+		repository.SetCharacterActivePlace(self.Character.ID, *place)
 	}
 	self.Character.ActivePlace = place
 
+	repository.SetLoginCharacter(self.Character.ID)
+	repository.SetCurrentCharacter(self.Character.UserID, self.Character.ID)
+
+	switch *place {
+	case "town":
+		self.ManageTown()
+	case "region":
+		self.ManageRegion()
+	}
+
+	return self.Character, nil
+}
+
+func (self *PlayForm) ManageTown() {
 	townID := repository.GetCharacterTownID(self.Character.ID)
 	if townID == nil {
 		defaultTownID := uint(1)
@@ -56,12 +72,10 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 		repository.SetTownCharacterPosition(*townID, *position)
 	}
 
-	repository.SetLoginCharacter(self.Character.ID)
-	repository.SetCurrentCharacter(self.Character.UserID, self.Character.ID)
-
 	resp := model.MoveOutgoing {
 		X: position.X,
 		Y: position.Y,
+		ActivePlace: "town",
 		Character: model.MoveCharacter {
 			ID: position.ID,
 		},
@@ -69,8 +83,23 @@ func (self *PlayForm) Perform() (interface{}, []error) {
 
 	data := encapsulateTopic("move", resp)
 	self.Websocket.SendBroadcast(data)
+}
 
-	return self.Character, nil
+func (self *PlayForm) ManageRegion() {
+	regionID := repository.GetCharacterRegionID(self.Character.ID)
+	position := repository.GetRegionCharacterPosition(*regionID, self.Character.ID)
+
+	resp := model.MoveOutgoing {
+		X: position.X,
+		Y: position.Y,
+		ActivePlace: "region",
+		Character: model.MoveCharacter {
+			ID: position.ID,
+		},
+	}
+
+	data := encapsulateTopic("move", resp)
+	self.Websocket.SendBroadcast(data)
 }
 
 func encapsulateTopic(action string, data interface{}) []byte {
