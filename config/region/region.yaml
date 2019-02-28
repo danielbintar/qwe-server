@@ -5,7 +5,7 @@ regions:
     monsters:
       -
         id: 1
-        total: 1
+        total: 3
         position:
           min_x: 10
           max_x: 20
