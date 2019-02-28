@@ -13,6 +13,10 @@ func regionUsersKey(id uint) string {
 	return "regions:" + strconv.FormatUint(uint64(id), 10) + ":users"
 }
 
+func regionOccupyKey(id uint) string {
+	return "regions:" + strconv.FormatUint(uint64(id), 10) + ":occupy"
+}
+
 func GetRegionCharactersPosition(id uint) []*model.CharacterPosition {
 	var positions []*model.CharacterPosition
 	r, err := config.RedisInstance().HGetAll(regionUsersKey(id)).Result()
@@ -60,6 +64,28 @@ func SetRegionCharacterPosition(regionID uint, pos model.CharacterPosition) {
 	coordinateJson, _ := json.Marshal(coordinate)
 
 	err := config.RedisInstance().HSet(regionUsersKey(regionID), strconv.FormatUint(uint64(pos.ID), 10), coordinateJson).Err()
+	if err != nil { panic(err) }
+}
+
+func GetRegionOccupy(id uint, pos model.Position) *uint {
+	var occupierID *uint
+	key := strconv.FormatUint(uint64(pos.X), 10) + ":" + strconv.FormatUint(uint64(pos.Y), 10)
+	r, err := config.RedisInstance().HGet(regionOccupyKey(id), key).Result()
+	if err != nil {
+		if err.Error() == "redis: nil" {
+			return nil
+		} else {
+			panic(err)
+		}
+	} else {
+		json.Unmarshal([]byte(r), &occupierID)
+	}
+	return occupierID
+}
+
+func SetRegionOccupy(regionID uint, pos model.Position, id uint) {
+	key := strconv.FormatUint(uint64(pos.X), 10) + ":" + strconv.FormatUint(uint64(pos.Y), 10)
+	err := config.RedisInstance().HSet(regionOccupyKey(regionID), key, id).Err()
 	if err != nil { panic(err) }
 }
 
