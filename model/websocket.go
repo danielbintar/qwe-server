@@ -19,3 +19,8 @@ type LeaveTownData struct {
 type LeaveRegionData struct {
 	ID uint `json:"id"`
 }
+
+type InitBattleData struct {
+	ID        uint `json:"id"`
+	MonsterID uint `json:"monster_id"`
+}

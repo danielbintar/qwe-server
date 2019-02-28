@@ -133,7 +133,7 @@ func (c Client) manageMoveRegion(req model.MoveIncoming) {
 
 	monsterID := repository.GetRegionOccupy(*regionID, pos)
 	if monsterID != nil {
-		c.send <- []byte(constant.PING)
+		c.initBattle(*monsterID)
 		return
 	}
 
@@ -149,5 +149,15 @@ func (c Client) manageMoveRegion(req model.MoveIncoming) {
 	}
 
 	data := encapsulateTopic("move", resp)
+	c.hub.Broadcast <- data
+}
+
+func (c Client) initBattle(monsterID uint) {
+	resp := model.InitBattleData {
+		ID: c.character.ID,
+		MonsterID: monsterID,
+	}
+
+	data := encapsulateTopic("init_battle", resp)
 	c.hub.Broadcast <- data
 }
