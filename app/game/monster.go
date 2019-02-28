@@ -1,8 +1,6 @@
 package game
 
 import (
-	// "fmt"
-	// "time"
 	"math/rand"
 	"github.com/danielbintar/qwe-server/repository"
 	"github.com/danielbintar/qwe-server/model"
@@ -38,14 +36,4 @@ func spawnMonster(id uint, monsterID uint, regionID uint, bound model.RangePosit
 	repository.SpawnMonster(spawn)
 
 	return spawn
-}
-
-func manageMonster(id uint) {
-	// for {
-		// time.Sleep(10000 * time.Millisecond)
-
-		// monster := repository.FindSpawnMonster(id)
-		// fmt.Println(monster.Position.X)
-		// fmt.Println(monster.Position.Y)
-	// }
 }
