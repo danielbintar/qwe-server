@@ -27,8 +27,6 @@ func (c Client) manageMove(rawData []byte) {
 	default:
 		c.send <- []byte(constant.PING)
 	}
-
-
 }
 
 func (c Client) manageMoveTown(req model.MoveIncoming) {
@@ -126,6 +124,17 @@ func (c Client) manageMoveRegion(req model.MoveIncoming) {
 
 			return
 		}
+	}
+
+	pos := model.Position {
+		X: position.X,
+		Y: position.Y,
+	}
+
+	monsterID := repository.GetRegionOccupy(*regionID, pos)
+	if monsterID != nil {
+		c.send <- []byte(constant.PING)
+		return
 	}
 
 	repository.SetRegionCharacterPosition(*regionID, *position)
