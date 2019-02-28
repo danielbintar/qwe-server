@@ -38,5 +38,8 @@ func FindRegion(w http.ResponseWriter, r *http.Request) {
 	region, _ := ctx.Value("region").(*model.Region)
 	region.CharactersPosition = repository.GetRegionCharactersPosition(region.ID)
 
-	render.Render(w, r, region)
+	serializer := region.Serialize()
+	serializer.Monsters = repository.AllSpawnMonster(region.ID)
+
+	render.Render(w, r, serializer)
 }

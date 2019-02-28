@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielbintar/qwe-server/app/websocket"
+	"github.com/danielbintar/qwe-server/app/game"
 	controller "github.com/danielbintar/qwe-server/controller/web"
 	"github.com/danielbintar/qwe-server/config"
 
@@ -15,6 +16,7 @@ import (
 func main() {
 	gotenv.Load()
 	config.Instance()
+	config.RedisInstance().FlushDB()
 	r := chi.NewRouter()
 
 	r.Route("/users", func(r chi.Router) {
@@ -58,6 +60,7 @@ func main() {
 	})
 
 	websocket.Main(r)
+	game.Main()
 
 	fmt.Println("listen to 3333")
 	http.ListenAndServe(":3333", r)
